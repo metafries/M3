@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ActivityListItem from '../cards/ActivityListItem'
+import { sampleData } from '../api/sampleData'
 
-export default function ActivityList({ activities }) {
+export default function ActivityList() {
+    const [activities, setActivities] = useState(sampleData);
+
     return (
         <React.Fragment>
             {

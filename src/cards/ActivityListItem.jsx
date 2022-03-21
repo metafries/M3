@@ -13,6 +13,7 @@ import ActivityActions from '../components/activity/ActivityActions';
 import ActivityDesc from '../components/activity/ActivityDesc';
 import CardMedia from '@material-ui/core/CardMedia';
 import ActivityStatus from '../components/activity/ActivityStatus';
+import { Link } from 'react-router-dom';
 
 const actions = '#afadaa';
 const content = 'textSecondary';
@@ -62,7 +63,7 @@ function ActivityListItem({ activity }) {
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
-      setExpanded(!expanded);
+        setExpanded(!expanded);
     };
 
     return (
@@ -71,13 +72,16 @@ function ActivityListItem({ activity }) {
                 menuStyle={menuStyle}
                 activity={activity}
             />
+            <Link to={`/activities/${activity.id}`}>
                 <div style={{ position: 'relative' }}>
                     <CardMedia
                         className={classes.media}
+                        image={`/categoryImages/${activity.category}.jpeg`}
+                        title={activity.category}
                     />
                     <div className={classes.overlay}>
                         <div style={{ position: 'absolute', bottom: '16px' }}>
-                        <ActivityStatus activity={activity} />
+                            <ActivityStatus activity={activity} />
                             <Typography color={content}>
                                 {`-- Interested · ${activity.attendees.length} Going`}
                             </Typography>
@@ -87,6 +91,7 @@ function ActivityListItem({ activity }) {
                         </div>
                     </div>
                 </div>
+            </Link>
             <CardActions disableSpacing>
                 <ActivityActions
                     activity={activity}

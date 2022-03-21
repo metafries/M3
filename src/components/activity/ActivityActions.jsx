@@ -6,6 +6,8 @@ import ShareIcon from '@material-ui/icons/Share';
 import ChatIcon from '@material-ui/icons/Chat';
 import { CircularProgress } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
+import { useHistory } from 'react-router-dom';
+import ActivityChat from '../../popups/ActivityChat'
 
 const active = '#987000';
 const inactive = '#a9a9a9';
@@ -14,16 +16,17 @@ function ActivityActions({
     activity,
     handleSelectActivity,
 }) {
-    const handleChatRoute = id => {
-    }
     const isGoing = false;
     const isCancelled = true;
+    const history = useHistory();  
+    const [openChat, setOpenChat] = React.useState(false);
 
     return (
         <React.Fragment>
-                <IconButton style={{ color: inactive }} aria-label="interested">
-                    <GradeIcon />
-                </IconButton>
+            <ActivityChat openChat={openChat} setOpenChat={setOpenChat} />
+            <IconButton style={{ color: inactive }} aria-label="interested">
+                <GradeIcon />
+            </IconButton>
             <IconButton
                 onClick={() => {
                     handleSelectActivity(activity.id);
@@ -34,10 +37,7 @@ function ActivityActions({
                 <CheckCircleIcon />
             </IconButton>
             <IconButton
-                onClick={(e) => {
-                    handleSelectActivity(activity.id);
-                    handleChatRoute(activity.id)
-                }}
+                onClick={(e) => setOpenChat(true)}
                 style={{ color: active }}
                 aria-label="chat"
             >

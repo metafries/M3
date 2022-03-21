@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,12 +38,18 @@ const useStyles = makeStyles((theme) => ({
   
 export default function ActivityForm({ open, handleClose }) {
       const classes = useStyles();
+      const [closeRoute, setCloseRoute] = useState('/activities');
 
     return (
         <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
           <AppBar className={classes.appBar}>
             <Toolbar>
-              <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+              <IconButton 
+                component={Link}
+                to={closeRoute}              
+                edge="start" 
+                onClick={handleClose} 
+              >
                 <CloseIcon />
               </IconButton>
               <Typography variant="h6" className={classes.title}>

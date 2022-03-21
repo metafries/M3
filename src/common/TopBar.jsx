@@ -1,7 +1,6 @@
 import React from 'react'
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -23,7 +22,9 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Avatar } from '@material-ui/core';
-import ActivityForm from "../forms/ActivityForm";
+import ActivityForm from "../popups/ActivityForm";
+import { Link, useHistory } from 'react-router-dom';
+import IdentityForm from '../popups/IdentityForm';
 
 const drawerWidth = 'auto';
 const appBarBg = 'transparent';
@@ -120,6 +121,7 @@ function TopBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [openDrawer, setOpenDrawer] = React.useState(false);
+    const [authenticated, setAuthenticated] = React.useState(true);
 
     const handleDrawerOpen = () => {
       setOpenDrawer(true);
@@ -139,10 +141,24 @@ function TopBar() {
       setOpen(false);
     };
 
+    const [openIdForm, setOpenIdForm] = React.useState(false);
+
+    const handleIdFormOpen = () => {
+        setOpenIdForm(true);
+    }
+
+    const handleIdFormClose = () => {
+        setOpenIdForm(false);
+    }
+
     return (
         <div className={classes.root}>
-            <CssBaseline />
             <ActivityForm open={open} handleClose={handleClose}  />
+            <IdentityForm 
+                open={openIdForm} 
+                handleClose={handleIdFormClose} 
+                setAuthenticated={setAuthenticated}
+            />
             <AppBar
                 position="fixed"
                 className={clsx(classes.appBar, {
@@ -156,6 +172,7 @@ function TopBar() {
                         className={classes.title}
                     >
                         <IconButton
+                            component={Link}
                             to='/'
                             style={{ padding: 0 }}
                         >
@@ -168,13 +185,30 @@ function TopBar() {
                     >
                         <SearchIcon style={tool} />
                     </IconButton>
-                    <IconButton
-                        style={iconBtn}
-                        edge="end"
-                        onClick={handleDrawerOpen}
-                    >
-                        <ExitToAppIcon style={tool} />
-                    </IconButton>
+                    {
+                        authenticated
+                            ?   <IconButton
+                                    style={iconBtn}
+                                    edge="end"
+                                    onClick={handleDrawerOpen}
+                                    className={clsx(openDrawer && classes.hide)}
+                                >
+                                    <StyledBadge color="secondary" variant='dot'>
+                                        <Avatar
+                                            alt={'MELLO'}
+                                            src={'/'}
+                                            className={classes.avatar}
+                                        />
+                                    </StyledBadge>
+                                </IconButton>
+                            :   <IconButton
+                                    style={iconBtn}
+                                    edge="end"
+                                    onClick={handleIdFormOpen}
+                                >
+                                    <ExitToAppIcon style={tool} />
+                                </IconButton>
+                    }
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -212,6 +246,8 @@ function TopBar() {
                 <List style={drawerOpts}>
                     <ListItem
                         button
+                        onClick={handleDrawerClose}
+                        component={Link}
                         to='/activities'
                     >
                         <ListItemIcon>
@@ -223,6 +259,7 @@ function TopBar() {
                 <Divider style={divider} />
                 <List style={drawerOpts}>
                     <ListItem
+                        component={Link}
                         to='/create'
                         onClick={handleClickOpen}
                         button
@@ -261,7 +298,7 @@ function TopBar() {
                 <Divider style={divider} />
                 <List style={drawerOpts}>
                     <ListItem
-                        onClick={() => {}}
+                        onClick={() => {setAuthenticated(false); setOpenDrawer(false)}}
                         button
                     >
                         <ListItemIcon>
