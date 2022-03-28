@@ -21,7 +21,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { LinearProgress } from '@material-ui/core';
-import mockData from '../api/mockData';
+import mockData from '../../api/mockData';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,17 +51,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ActivityChat({ openChat, setOpenChat }) {
-  const [activity, setActivity] = useState({
-    id: '',
-    title: '',
-    category: '',
-    description: '',
-    date: '',
-    city: '',
-    venue: '',
-  });
-
+function ActivityChat({ activity, openChat, setOpenChat }) {
   const { id } = useParams();
   const classes = useStyles();
 
@@ -80,7 +70,7 @@ function ActivityChat({ openChat, setOpenChat }) {
             <ArrowBackIosIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            CHAT
+            {activity.title}
           </Typography>
         </Toolbar>
       </AppBar>

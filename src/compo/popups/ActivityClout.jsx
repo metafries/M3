@@ -10,12 +10,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import ActivityCloutItem from '../components/activity/ActivityCloutItem';
+import ActivityCloutItem from '../common/activity/ActivityCloutItem';
 import Slide from '@material-ui/core/Slide';
 import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import mockData from '../api/mockData'
+import mockData from '../../api/mockData'
 
 const useStyles = makeStyles((theme) => ({
     appBar: {

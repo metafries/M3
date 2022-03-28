@@ -1,14 +1,16 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
-import LandingPage from './pages/LandingPage'
-import ActivityList from './pages/ActivityList'
-import TopBar from './common/TopBar'
+import LandingPage from './compo/pages/LandingPage'
+import ActivityList from './compo/pages/ActivityList'
+import TopBar from './compo/nav/TopBar'
 import Container from '@material-ui/core/Container'
-import ActivityForm from './popups/ActivityForm'
+import ActivityForm from './compo/popups/ActivityForm'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import ActivityItem from './cards/ActivityItem'
-import ActivityChat from './popups/ActivityChat'
+import ActivityItem from './compo/cards/ActivityItem'
+import ActivityChat from './compo/popups/ActivityChat'
+import ModalContainer from './compo/modal/ModalContainer'
+import ActivityMenu from './compo/nav/ActivityMenu'
 
 const custom = createTheme({
     palette: {
@@ -31,6 +33,8 @@ export default function App() {
   return (
     <MuiThemeProvider theme={custom}>
       <CssBaseline />
+      <ModalContainer />
+      <ActivityMenu />
       <Route exact path='/' component={LandingPage} />          
       <Route
         path={'/(.+)'}

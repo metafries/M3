@@ -6,6 +6,8 @@ import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { useSelector, useDispatch } from 'react-redux'
+import { handleSelected, handleMenuClick } from '../../../actions/activityActs'
 
 const actions = '#afadaa';
 
@@ -22,10 +24,9 @@ const useStyles = makeStyles((theme) =>
 export default function ActivityHeader({
     menuStyle,
     activity,
-    handleMenuClick,
-    handleSelectActivity,
 }) {
     const classes = useStyles();
+    const dispatch = useDispatch();
     
     return (
         <React.Fragment>
@@ -43,8 +44,8 @@ export default function ActivityHeader({
                     <IconButton
                         style={{ color: actions }}
                         onClick={(e) => {
-                            handleMenuClick(e);
-                            handleSelectActivity(activity.id)
+                            dispatch(handleSelected(activity.id));
+                            dispatch(handleMenuClick(e));
                         }}
                         aria-label="settings"
                     >

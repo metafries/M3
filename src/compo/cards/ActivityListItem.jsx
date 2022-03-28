@@ -6,13 +6,13 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ActivityTags from '../components/activity/ActivityTags';
-import ActivityHeader from '../components/activity/ActivityHeader';
+import ActivityTags from '../../compo/common/activity/ActivityTags';
+import ActivityHeader from '../../compo/common/activity/ActivityHeader';
 import Typography from '@material-ui/core/Typography';
-import ActivityActions from '../components/activity/ActivityActions';
-import ActivityDesc from '../components/activity/ActivityDesc';
+import ActivityActions from '../../compo/common/activity/ActivityActions';
+import ActivityDesc from '../../compo/common/activity/ActivityDesc';
 import CardMedia from '@material-ui/core/CardMedia';
-import ActivityStatus from '../components/activity/ActivityStatus';
+import ActivityStatus from '../../compo/common/activity/ActivityStatus';
 import { Link } from 'react-router-dom';
 
 const actions = '#afadaa';

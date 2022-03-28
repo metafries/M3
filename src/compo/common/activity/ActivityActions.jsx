@@ -23,7 +23,7 @@ function ActivityActions({
 
     return (
         <React.Fragment>
-            <ActivityChat openChat={openChat} setOpenChat={setOpenChat} />
+            <ActivityChat activity={activity} openChat={openChat} setOpenChat={setOpenChat} />
             <IconButton style={{ color: inactive }} aria-label="interested">
                 <GradeIcon />
             </IconButton>
