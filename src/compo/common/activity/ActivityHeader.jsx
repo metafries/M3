@@ -44,7 +44,7 @@ export default function ActivityHeader({
                     <IconButton
                         style={{ color: actions }}
                         onClick={(e) => {
-                            dispatch(handleSelected(activity.id));
+                            dispatch(handleSelected(activity));
                             dispatch(handleMenuClick(e));
                         }}
                         aria-label="settings"

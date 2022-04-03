@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import ActivityStatus from './ActivityStatus';
 import ActivityClout from '../../popups/ActivityClout'
+import { format } from 'date-fns'
 
 const content = 'textSecondary';
 const CustomBtn = withStyles({
@@ -27,7 +28,7 @@ function ActivityInfo({ activity }) {
                 </CustomBtn>
             </Typography>
             <Typography color={content}>
-                {activity.date}
+                {format(activity.date, 'dd MMM yyyy h:mm aa')}
             </Typography>
             <Typography color={content}>
                 {activity.venue}

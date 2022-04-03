@@ -1,14 +1,28 @@
 import { sampleData } from "../api/sampleData";
-import { CREATE_ACTIVITY, UPDATE_ACTIVITY, DELETE_ACTIVITY, HANDLE_MENU_CLICK, HANDLE_SELECTED, HANDLE_MENU_CLOSE } from "../constants/activityConst";
+import { 
+    TOGGLE_ACTIVITY_FORM,
+    CREATE_ACTIVITY, 
+    UPDATE_ACTIVITY, 
+    DELETE_ACTIVITY, 
+    HANDLE_MENU_CLICK, 
+    HANDLE_SELECTED, 
+    HANDLE_MENU_CLOSE 
+} from "../constants/activityConst";
 
 const initialState = {
     activities: sampleData,
     anchorEl: null,
     selectedActivity: null,
+    activityForm: false,
 }
 
 export default function activityRdc(state = initialState, {type, payload}) {
     switch (type) {
+        case TOGGLE_ACTIVITY_FORM:
+            return {
+                ...state,
+                activityForm: !state.activityForm
+            }
         case HANDLE_SELECTED:
             return {
                 ...state,

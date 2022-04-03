@@ -6,6 +6,7 @@ import ActivityMenu from '../nav/ActivityMenu'
 
 export default function ActivityList() {
     const { activities } = useSelector(state => state.activity)
+    console.log(activities)
 
     return (
         <React.Fragment>

@@ -67,7 +67,7 @@ function ActivityDeleteConfirm() {
           false
             ? <Button><CircularProgress style={{ color: '#fc4000' }} size={20} /></Button>
             : <DeleteButton
-              onClick={() => handleDeleteActivity(selectedActivity)}
+              onClick={() => handleDeleteActivity(selectedActivity.id)}
               style={{ borderRadius: 0 }}
               variant="outlined"
               color="secondary"

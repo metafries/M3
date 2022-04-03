@@ -11,14 +11,14 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { useSelector, useDispatch } from 'react-redux'
 import { openModal } from '../../actions/commonActs'
 import ActivityDeleteConfirm from '../modal/ActivityDeleteConfirm';
-import { handleMenuClose } from '../../actions/activityActs'
+import { toggleActivityForm, handleMenuClose } from '../../actions/activityActs'
 
 function ActivityMenu() {
     const { anchorEl, selectedActivity } = useSelector(state => state.activity)
     const dispatch = useDispatch();
 
-    const listItemIcon = { 
-        minWidth: '40px', 
+    const listItemIcon = {
+        minWidth: '40px',
         color: 'whitesmoke',
     };
 
@@ -53,7 +53,7 @@ function ActivityMenu() {
                     selectedActivity &&
                     <MenuItem>
                         <ListItemIcon style={listItemIcon}>
-                            <BookmarkBorderIcon/>
+                            <BookmarkBorderIcon />
                         </ListItemIcon>
                         <Typography>Save</Typography>
                     </MenuItem>
@@ -62,7 +62,7 @@ function ActivityMenu() {
                     selectedActivity &&
                     <MenuItem>
                         <ListItemIcon style={listItemIcon}>
-                            <FlagOutlinedIcon/>
+                            <FlagOutlinedIcon />
                         </ListItemIcon>
                         <Typography>Report</Typography>
                     </MenuItem>
@@ -72,18 +72,19 @@ function ActivityMenu() {
                     <MenuItem
                         component={Link}
                         to={selectedActivity && `/edit/${selectedActivity.id}`}
+                        onClick={() => dispatch(handleMenuClose())}
                     >
                         <ListItemIcon style={listItemIcon}>
-                            <EditOutlinedIcon/>
+                            <EditOutlinedIcon />
                         </ListItemIcon>
                         <Typography>Edit</Typography>
                     </MenuItem>
                 }
                 {
                     selectedActivity &&
-                    <MenuItem onClick={() => dispatch(openModal(<ActivityDeleteConfirm/>))}>
+                    <MenuItem onClick={() => dispatch(openModal(<ActivityDeleteConfirm />))}>
                         <ListItemIcon style={listItemIcon}>
-                            <DeleteOutlineIcon/>
+                            <DeleteOutlineIcon />
                         </ListItemIcon>
                         <Typography>Delete</Typography>
                     </MenuItem>

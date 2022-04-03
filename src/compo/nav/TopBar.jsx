@@ -25,6 +25,9 @@ import { Avatar } from '@material-ui/core';
 import ActivityForm from "../popups/ActivityForm";
 import { Link, useHistory } from 'react-router-dom';
 import IdentityForm from '../popups/IdentityForm';
+import { useSelector, useDispatch } from 'react-redux'
+import { toggleActivityForm, handleSelected } from '../../actions/activityActs'
+import { signOutUser } from '../../actions/authActs'
 
 const drawerWidth = 'auto';
 const appBarBg = 'transparent';
@@ -121,7 +124,8 @@ function TopBar() {
     const classes = useStyles();
     const theme = useTheme();
     const [openDrawer, setOpenDrawer] = React.useState(false);
-    const [authenticated, setAuthenticated] = React.useState(true);
+    const { authenticated } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
 
     const handleDrawerOpen = () => {
       setOpenDrawer(true);
@@ -153,11 +157,9 @@ function TopBar() {
 
     return (
         <div className={classes.root}>
-            <ActivityForm open={open} handleClose={handleClose}  />
             <IdentityForm 
                 open={openIdForm} 
                 handleClose={handleIdFormClose} 
-                setAuthenticated={setAuthenticated}
             />
             <AppBar
                 position="fixed"
@@ -260,8 +262,10 @@ function TopBar() {
                 <List style={drawerOpts}>
                     <ListItem
                         component={Link}
-                        to='/create'
-                        onClick={handleClickOpen}
+                        to='/create'                    
+                        onClick={() => {
+                            dispatch(handleSelected(null));
+                        }}
                         button
                     >
                         <ListItemIcon>
@@ -298,7 +302,10 @@ function TopBar() {
                 <Divider style={divider} />
                 <List style={drawerOpts}>
                     <ListItem
-                        onClick={() => {setAuthenticated(false); setOpenDrawer(false)}}
+                        onClick={() => {
+                            dispatch(signOutUser());
+                            setOpenDrawer(false)
+                        }}
                         button
                     >
                         <ListItemIcon>

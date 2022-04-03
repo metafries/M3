@@ -1,4 +1,5 @@
 import { 
+    TOGGLE_ACTIVITY_FORM,
     HANDLE_SELECTED,
     HANDLE_MENU_CLICK,
     HANDLE_MENU_CLOSE,
@@ -7,10 +8,17 @@ import {
     UPDATE_ACTIVITY 
 } from "../constants/activityConst";
 
-export function handleSelected(activityId) {
+export function toggleActivityForm() {
+    return {
+        type: TOGGLE_ACTIVITY_FORM,
+        payload: null
+    }
+}
+
+export function handleSelected(activity) {
     return {
         type: HANDLE_SELECTED,
-        payload: activityId
+        payload: activity
     }
 }
 

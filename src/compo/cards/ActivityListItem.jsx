@@ -14,6 +14,7 @@ import ActivityDesc from '../../compo/common/activity/ActivityDesc';
 import CardMedia from '@material-ui/core/CardMedia';
 import ActivityStatus from '../../compo/common/activity/ActivityStatus';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns'
 
 const actions = '#afadaa';
 const content = 'textSecondary';
@@ -86,7 +87,7 @@ function ActivityListItem({ activity }) {
                                 {`-- Interested · ${activity.attendees.length} Going`}
                             </Typography>
                             <Typography color={content}>
-                                {activity.date}
+                                {format(activity.date, 'dd MMM yyyy h:mm aa')}
                             </Typography>
                         </div>
                     </div>
