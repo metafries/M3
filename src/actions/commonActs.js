@@ -1,4 +1,14 @@
-import { CLOSE_MODAL, OPEN_MODAL } from "../constants/commonConst";
+import { 
+    TOGGLE_DRAWER,
+    CLOSE_MODAL, OPEN_MODAL 
+} from "../constants/commonConst";
+
+export function toggleDrawer(payload) {
+    return {
+        type: TOGGLE_DRAWER,
+        payload: payload,
+    }
+}
 
 export function openModal(content) {
     return {

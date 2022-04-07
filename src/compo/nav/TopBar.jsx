@@ -28,6 +28,7 @@ import IdentityForm from '../popups/IdentityForm';
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleActivityForm, handleSelected } from '../../actions/activityActs'
 import { signOutUser } from '../../actions/authActs'
+import { toggleDrawer } from '../../actions/commonActs';
 
 const drawerWidth = 'auto';
 const appBarBg = 'transparent';
@@ -123,27 +124,9 @@ const useStyles = makeStyles((theme) =>
 function TopBar() {    
     const classes = useStyles();
     const theme = useTheme();
-    const [openDrawer, setOpenDrawer] = React.useState(false);
+    const { openDrawer } = useSelector(state => state.common);
     const { authenticated } = useSelector(state => state.auth);
     const dispatch = useDispatch();
-
-    const handleDrawerOpen = () => {
-      setOpenDrawer(true);
-    };
-  
-    const handleDrawerClose = () => {
-      setOpenDrawer(false);
-    };
-
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
 
     const [openIdForm, setOpenIdForm] = React.useState(false);
 
@@ -192,7 +175,7 @@ function TopBar() {
                             ?   <IconButton
                                     style={iconBtn}
                                     edge="end"
-                                    onClick={handleDrawerOpen}
+                                    onClick={() => dispatch(toggleDrawer(openDrawer))}
                                     className={clsx(openDrawer && classes.hide)}
                                 >
                                     <StyledBadge color="secondary" variant='dot'>
@@ -223,7 +206,7 @@ function TopBar() {
                 }}
             >
                 <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
+                    <IconButton onClick={() => dispatch(toggleDrawer(openDrawer))}>
                         {
                             theme.direction === 'rtl'
                                 ? <ChevronLeftIcon style={closeDrawerBtn} />
@@ -248,7 +231,7 @@ function TopBar() {
                 <List style={drawerOpts}>
                     <ListItem
                         button
-                        onClick={handleDrawerClose}
+                        onClick={() => dispatch(toggleDrawer(openDrawer))}
                         component={Link}
                         to='/activities'
                     >
@@ -304,7 +287,7 @@ function TopBar() {
                     <ListItem
                         onClick={() => {
                             dispatch(signOutUser());
-                            setOpenDrawer(false)
+                            dispatch(toggleDrawer(openDrawer));
                         }}
                         button
                     >

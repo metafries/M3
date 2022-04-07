@@ -1,3 +1,4 @@
+/* global google */
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -24,6 +25,8 @@ import FormikDateTimePicker from '../common/utils/FormikDateTimePicker'
 import { categoryOpts } from '../../constants/categoryOpts';
 import cuid from 'cuid';
 import * as yup from 'yup';
+import FormikPlaceInput from '../common/utils/FormikPlaceInput';
+import { toggleDrawer } from '../../actions/commonActs';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +52,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function ActivityForm({ match }) {
   const dispatch = useDispatch();
+  const { openDrawer } = useSelector(state => state.common);
+
   const selectedActivity = useSelector(state =>
     state.activity.activities.find(a => a.id === match.params.id));
 
@@ -58,8 +63,14 @@ export default function ActivityForm({ match }) {
     category: '',
     description: '',
     date: new Date(),
-    city: '',
-    venue: '',
+    city: {
+      address: '', 
+      latLng: null
+    },
+    venue: {
+      address: '', 
+      latLng: null
+    },
   }
 
   const [activity, setActivity] = useState(initialValues);
@@ -78,8 +89,12 @@ export default function ActivityForm({ match }) {
     description: yup.string().required(),
     category: yup.string().required(),
     date: yup.date().min(new Date()),
-    city: yup.string().required(),
-    venue: yup.string().required(),
+    city: yup.object().shape({
+      address: yup.string().required('city is a required field')
+    }),
+    venue: yup.object().shape({
+      address: yup.string().required('venue is a required field')
+    }),
   })
 
   const handleFormSubmit = async (activity) => {
@@ -96,9 +111,10 @@ export default function ActivityForm({ match }) {
         attendees: [],
       }
       await dispatch(createActivity(newActivity));
+      dispatch(toggleDrawer(openDrawer));
       history.push(`/activities/${newActivity.id}`);
     }
-  }
+  } 
 
   useEffect(() => {
     console.log('real time change preview of activity object :', activity);
@@ -113,7 +129,7 @@ export default function ActivityForm({ match }) {
       initialValues={activity}
       onSubmit={values => handleFormSubmit(values)}
     >
-      {({ handleSubmit, dirty }) => (
+      {({ handleSubmit, dirty, values }) => (
         <Dialog
           fullScreen
           open={true}
@@ -150,8 +166,17 @@ export default function ActivityForm({ match }) {
               <FormikTextArea name='description' label='Description' maxRows={4} />
               <FormikSelector name='category' label='Category' opts={categoryOpts} />
               <FormikDateTimePicker name='date' label='Date' />
-              <FormikTextInput name='city' label='City' />
-              <FormikTextInput name='venue' label='Venue' />
+              <FormikPlaceInput name='city' label='City' />
+              <FormikPlaceInput 
+                name='venue' 
+                label='Venue'
+                disabled={!values.city.latLng} 
+                options={{
+                  location: new google.maps.LatLng(values.city.latLng),
+                  radius: 1000,
+                  types: ['establishment']
+                }}
+              />
             </Form>
           </Container>
         </Dialog>

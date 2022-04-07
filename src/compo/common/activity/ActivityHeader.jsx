@@ -53,7 +53,7 @@ export default function ActivityHeader({
                     </IconButton>
                 }
                 title={activity.title}
-                subheader={`${activity.hostedBy} · ${activity.city}`}
+                subheader={`${activity.hostedBy} · ${activity.city.address}`}
             />
         </React.Fragment>
     )
