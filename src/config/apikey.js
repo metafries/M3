@@ -1,0 +1,1 @@
+export const GCLOUD_API_KEY = 'AIzaSyCALemqdfBV5IqGCQq0cbDDZ3ttgdFTfwU'

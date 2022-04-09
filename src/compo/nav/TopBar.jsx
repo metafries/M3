@@ -29,6 +29,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toggleActivityForm, handleSelected } from '../../actions/activityActs'
 import { signOutUser } from '../../actions/authActs'
 import { toggleDrawer } from '../../actions/commonActs';
+import ActivitySearch from '../popups/ActivitySearch'
 
 const drawerWidth = 'auto';
 const appBarBg = 'transparent';
@@ -138,6 +139,13 @@ function TopBar() {
         setOpenIdForm(false);
     }
 
+    const [openActivitySearch, setOpenActivitySearch] = React.useState(false);
+
+    const closeActivitySearch = () => {
+        setOpenActivitySearch(false);
+    }
+    
+
     return (
         <div className={classes.root}>
             <IdentityForm 
@@ -165,11 +173,15 @@ function TopBar() {
                         </IconButton>
                     </Typography>
                     <IconButton
-                        // onClick={() => setOpenActivitySearch(true)}
+                        onClick={() => setOpenActivitySearch(true)}
                         style={iconBtn}
                     >
                         <SearchIcon style={tool} />
                     </IconButton>
+                    <ActivitySearch 
+                        openActivitySearch={openActivitySearch}
+                        closeActivitySearch={closeActivitySearch}
+                    />
                     {
                         authenticated
                             ?   <IconButton

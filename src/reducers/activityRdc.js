@@ -6,11 +6,12 @@ import {
     DELETE_ACTIVITY, 
     HANDLE_MENU_CLICK, 
     HANDLE_SELECTED, 
-    HANDLE_MENU_CLOSE 
+    HANDLE_MENU_CLOSE, 
+    FETCH_ACTIVITIES
 } from "../constants/activityConst";
 
 const initialState = {
-    activities: sampleData,
+    activities: [],
     anchorEl: null,
     selectedActivity: null,
     activityForm: false,
@@ -18,6 +19,11 @@ const initialState = {
 
 export default function activityRdc(state = initialState, {type, payload}) {
     switch (type) {
+        case FETCH_ACTIVITIES:
+            return {
+                ...state,
+                activities: payload
+            }
         case TOGGLE_ACTIVITY_FORM:
             return {
                 ...state,

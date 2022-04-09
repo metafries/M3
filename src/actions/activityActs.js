@@ -5,8 +5,24 @@ import {
     HANDLE_MENU_CLOSE,
     CREATE_ACTIVITY, 
     DELETE_ACTIVITY, 
-    UPDATE_ACTIVITY 
+    UPDATE_ACTIVITY, 
+    FETCH_ACTIVITIES
 } from "../constants/activityConst";
+import { asyncActionStart, asyncActionError, asyncActionFinish } from '../reducers/asyncRdc'
+import { fetchSampleData } from '../api/mockApi'
+
+export function loadActivities() {
+    return async function(dispatch) {
+        dispatch(asyncActionStart());
+        try {
+            const activities = await fetchSampleData();
+            dispatch({type: FETCH_ACTIVITIES, payload: activities});
+            dispatch(asyncActionFinish());
+        } catch (error) {
+            dispatch(asyncActionError(error));
+        }
+    }
+}
 
 export function toggleActivityForm() {
     return {
