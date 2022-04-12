@@ -15,7 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
-import { createActivity, updateActivity, handleMenuClose } from '../../actions/activityActs'
+import { createActivity, updateActivity, handleMenuClose, listenToActivities } from '../../actions/activityActs'
 import Container from '@material-ui/core/Container';
 import { Formik, Form } from 'formik';
 import FormikTextInput from '../common/utils/FormikTextInput'
@@ -27,6 +27,11 @@ import cuid from 'cuid';
 import * as yup from 'yup';
 import FormikPlaceInput from '../common/utils/FormikPlaceInput';
 import { toggleDrawer } from '../../actions/commonActs';
+import useFirestoreDoc from '../../hooks/useFirestoreDoc';
+import { addActivityToFirestore, listenToActivityFromFirestore, updateActivityInFirestore } from '../../api/firestoreService';
+import Errors from '../common/utils/Errors';
+import LoadingIndicator from '../common/utils/LoadingIndicator';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,11 +56,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function ActivityForm({ match }) {
-  const dispatch = useDispatch();
+  const { error, loading } = useSelector(state => state.async);
   const { openDrawer } = useSelector(state => state.common);
-
   const selectedActivity = useSelector(state =>
     state.activity.activities.find(a => a.id === match.params.id));
+
+  const dispatch = useDispatch();
+  useFirestoreDoc({
+    query: () => listenToActivityFromFirestore(match.params.id),
+    data: activity => dispatch(listenToActivities([activity])),
+    deps: [match.params.id, dispatch]
+  })  
 
   const initialValues = selectedActivity ?? {
     id: '',
@@ -64,11 +75,11 @@ export default function ActivityForm({ match }) {
     description: '',
     date: new Date(),
     city: {
-      address: '', 
+      address: '',
       latLng: null
     },
     venue: {
-      address: '', 
+      address: '',
       latLng: null
     },
   }
@@ -99,22 +110,15 @@ export default function ActivityForm({ match }) {
 
   const handleFormSubmit = async (activity) => {
     if (activity.id.length !== 0) {
-      await dispatch(updateActivity(activity));
+      await updateActivityInFirestore(activity);
       dispatch(handleMenuClose());
       history.push(`/activities/${activity.id}`)
     } else {
-      const newActivity = {
-        ...activity,
-        id: cuid(),
-        hostedBy: 'BADTZOS',
-        hostPhotoURL: '/',
-        attendees: [],
-      }
-      await dispatch(createActivity(newActivity));
+      await addActivityToFirestore(activity);
       dispatch(toggleDrawer(openDrawer));
-      history.push(`/activities/${newActivity.id}`);
+      history.push(`/activities`);
     }
-  } 
+  }
 
   useEffect(() => {
     console.log('real time change preview of activity object :', activity);
@@ -122,14 +126,23 @@ export default function ActivityForm({ match }) {
 
   const classes = useStyles();
 
+  if (match.path != '/create' && error) return <Errors error={error} />
+  if (loading) return <LoadingIndicator />
+
   return (
     <Formik
       validationSchema={schema}
       enableReinitialize
-      initialValues={activity}
-      onSubmit={values => handleFormSubmit(values)}
+      initialValues={initialValues}
+      onSubmit={values => {
+        try {
+          handleFormSubmit(values);
+        } catch (error) {
+          console.log(error.message);
+        }
+      }}
     >
-      {({ handleSubmit, dirty, values }) => (
+      {({ isSubmitting, handleSubmit, dirty, values }) => (
         <Dialog
           fullScreen
           open={true}
@@ -151,13 +164,17 @@ export default function ActivityForm({ match }) {
               <Typography variant="h6" className={classes.title}>
                 {selectedActivity ? 'EDIT' : 'CREATE'}
               </Typography>
-              <Button
-                disabled={!dirty}
-                size='large'
-                onClick={() => handleSubmit()}
-              >
-                SUBMIT
-            </Button>
+              {
+                isSubmitting
+                  ? <CircularProgress size={24} />
+                  : <Button
+                      disabled={!dirty}
+                      size='large'
+                      onClick={() => handleSubmit()}
+                    >
+                      SUBMIT
+                    </Button>
+              }
             </Toolbar>
           </AppBar>
           <Container style={{ marginTop: '55px' }} maxWidth='sm'>
@@ -167,10 +184,10 @@ export default function ActivityForm({ match }) {
               <FormikSelector name='category' label='Category' opts={categoryOpts} />
               <FormikDateTimePicker name='date' label='Date' />
               <FormikPlaceInput name='city' label='City' />
-              <FormikPlaceInput 
-                name='venue' 
+              <FormikPlaceInput
+                name='venue'
                 label='Venue'
-                disabled={!values.city.latLng} 
+                disabled={!values.city.latLng}
                 options={{
                   location: new google.maps.LatLng(values.city.latLng),
                   radius: 1000,

@@ -6,6 +6,8 @@ import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux'
 import { deleteActivity, handleMenuClose } from '../../actions/activityActs'
 import { closeModal } from '../../actions/commonActs'
+import { deleteActivityInFirestore } from '../../api/firestoreService';
+import { asyncActionFinish, asyncActionStart } from '../../reducers/asyncRdc';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteButton = withStyles((theme) => ({
+const CustomButton = withStyles((theme) => ({
   root: {
     border: '1px solid #fc4000',
     color: '#fc4000',
@@ -30,13 +32,16 @@ const DeleteButton = withStyles((theme) => ({
 
 function ActivityDeleteConfirm() {
   const history = useHistory();
+  const { loading } = useSelector(state => state.async);
   const { selectedActivity } = useSelector(state => state.activity);
   const dispatch = useDispatch();
 
   const handleDeleteActivity = async id => {
+    dispatch(asyncActionStart());
     dispatch(handleMenuClose());
-    await dispatch(deleteActivity(id));
+    await deleteActivityInFirestore(id);
     dispatch(closeModal());
+    dispatch(asyncActionFinish());
     history.push('/activities');
   }
 
@@ -64,16 +69,16 @@ function ActivityDeleteConfirm() {
           Cancel
       </Button>
         {
-          false
+          loading
             ? <Button><CircularProgress style={{ color: '#fc4000' }} size={20} /></Button>
-            : <DeleteButton
+            : <CustomButton
               onClick={() => handleDeleteActivity(selectedActivity.id)}
               style={{ borderRadius: 0 }}
               variant="outlined"
               color="secondary"
             >
               Delete Anyway
-            </DeleteButton>
+            </CustomButton>
         }
       </ButtonGroup>
     </div>

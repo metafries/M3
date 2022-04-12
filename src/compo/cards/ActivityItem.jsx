@@ -10,7 +10,12 @@ import ActivityMedia from '../../compo/common/activity/ActivityMedia';
 import ActivityInfo from '../../compo/common/activity/ActivityInfo';
 import ActivityActions from '../../compo/common/activity/ActivityActions';
 import ActivityDesc from '../../compo/common/activity/ActivityDesc';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import useFirestoreDoc from '../../hooks/useFirestoreDoc';
+import { listenToActivityFromFirestore } from '../../api/firestoreService';
+import { listenToActivities } from '../../actions/activityActs';
+import LoadingIndicator from '../common/utils/LoadingIndicator'
+import Errors from '../common/utils/Errors';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -31,9 +36,21 @@ const menuStyle = {
 }
 
 function ActivityItem({ match }) {
+    const { error, loading } = useSelector(state => state.async);
     const activity = useSelector(state => state.activity.activities.find(a => a.id === match.params.id));
+
+    const dispatch = useDispatch();
+    useFirestoreDoc({
+        query: () => listenToActivityFromFirestore(match.params.id),
+        data: activity => dispatch(listenToActivities([activity])),
+        deps: [match.params.id, dispatch]
+    })
     console.log(match.params.id)
+
     const classes = useStyles();
+
+    if (error) return <Errors error={error} />
+    if (loading) return <LoadingIndicator />
 
     return (
         <React.Fragment>

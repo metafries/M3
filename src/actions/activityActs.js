@@ -24,6 +24,13 @@ export function loadActivities() {
     }
 }
 
+export function listenToActivities(activities) {
+    return {
+        type: FETCH_ACTIVITIES,
+        payload: activities
+    }
+}
+
 export function toggleActivityForm() {
     return {
         type: TOGGLE_ACTIVITY_FORM,
