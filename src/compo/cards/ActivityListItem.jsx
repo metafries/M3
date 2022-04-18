@@ -15,6 +15,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import ActivityStatus from '../../compo/common/activity/ActivityStatus';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns'
+import { handleSelected, handleMenuClick } from '../../actions/activityActs'
+import ActivityMenu from '../nav/ActivityMenu';
 
 const actions = '#afadaa';
 const content = 'textSecondary';
@@ -70,6 +72,7 @@ function ActivityListItem({ activity }) {
     return (
         <Card className={classes.root}>
             <ActivityHeader
+                key={activity.id} 
                 menuStyle={menuStyle}
                 activity={activity}
             />

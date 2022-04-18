@@ -38,7 +38,7 @@ export default function activityRdc(state = initialState, {type, payload}) {
             console.log(state.selectedActivity)
             return {
                 ...state,
-                anchorEl: payload.currentTarget
+                anchorEl: payload
             }
         case HANDLE_MENU_CLOSE:
             return {

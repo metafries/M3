@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useSelector, useDispatch } from 'react-redux'
 import { handleSelected, handleMenuClick } from '../../../actions/activityActs'
+import ActivityMenu from '../../nav/ActivityMenu';
 
 const actions = '#afadaa';
 
@@ -27,9 +28,22 @@ export default function ActivityHeader({
 }) {
     const classes = useStyles();
     const dispatch = useDispatch();
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     
     return (
         <React.Fragment>
+            <ActivityMenu open={open} anchorEl={anchorEl} handleClose={handleClose} />
             <CardHeader
                 avatar={
                     <AvatarGroup max={2}>
@@ -44,8 +58,8 @@ export default function ActivityHeader({
                     <IconButton
                         style={{ color: actions }}
                         onClick={(e) => {
+                            handleClick(e);
                             dispatch(handleSelected(activity));
-                            dispatch(handleMenuClick(e));
                         }}
                         aria-label="settings"
                     >

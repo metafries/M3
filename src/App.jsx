@@ -13,6 +13,10 @@ import ActivityItem from './compo/cards/ActivityItem'
 import ActivityChat from './compo/popups/ActivityChat'
 import ModalContainer from './compo/modal/ModalContainer'
 import ActivityMenu from './compo/nav/ActivityMenu'
+import UserProfile from './compo/pages/UserProfile';
+import { useSelector } from 'react-redux';
+import LoadingIndicator from './compo/common/utils/LoadingIndicator';
+
 
 const custom = createTheme({
   palette: {
@@ -33,13 +37,15 @@ const custom = createTheme({
 
 export default function App() {
   const { key } = useLocation();
+  const { initialized } = useSelector(state => state.async)
+
+  if (!initialized) return <LoadingIndicator/>
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <MuiThemeProvider theme={custom}>
         <CssBaseline />
         <ModalContainer />
-        <ActivityMenu />
         <Route exact path='/' component={LandingPage} />
         <Route
           path={'/(.+)'}
@@ -48,9 +54,10 @@ export default function App() {
               <TopBar />
               <Container style={{ paddingLeft: 0, paddingRight: 0 }} maxWidth='sm'>
                 <Switch>
+                  <Route exact path='/profile' component={UserProfile} />
                   <Route exact path='/activities' component={ActivityList} />
-                  <Route path={['/create', '/edit/:id']} component={ActivityForm} key={key} />
                   <Route path='/activities/:id' component={ActivityItem} />
+                  <Route path={['/create', '/edit/:id']} component={ActivityForm} key={key} />
                 </Switch>
               </Container>
             </React.Fragment>

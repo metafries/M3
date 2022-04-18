@@ -16,6 +16,7 @@ import { listenToActivityFromFirestore } from '../../api/firestoreService';
 import { listenToActivities } from '../../actions/activityActs';
 import LoadingIndicator from '../common/utils/LoadingIndicator'
 import Errors from '../common/utils/Errors';
+import ActivityMenu from '../nav/ActivityMenu';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -62,6 +63,7 @@ function ActivityItem({ match }) {
                     menuStyle={menuStyle}
                     activity={activity}
                 />
+                <ActivityMenu />
                 <ActivityInfo activity={activity} />
                 <CardActions>
                     <ActivityActions

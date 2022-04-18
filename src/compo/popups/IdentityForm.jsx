@@ -25,6 +25,10 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { thirdParty, signInUser, signOutUser } from '../../actions/authActs'
 import { useSelector, useDispatch } from 'react-redux'
+import { registerInFirebase, signInWithEmail, thirdPartyLogin } from '../../api/firebaseService';
+import Validation from '../common/utils/Validation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFacebookSquare, faGoogle } from "@fortawesome/free-brands-svg-icons"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,11 +88,17 @@ function a11yProps(index) {
 export default function IdentityForm({ open, handleClose, setAuthenticated }) {
   const dispatch = useDispatch();
 
+  function handleThirdPartyLogin(provider)  {
+    handleClose(true);
+    thirdPartyLogin(provider);
+  }
+
   const classes = useStyles();
   const [closeRoute, setCloseRoute] = useState('/activities');
 
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
+    
     setValue(newValue);
   };
 
@@ -103,6 +113,12 @@ export default function IdentityForm({ open, handleClose, setAuthenticated }) {
     email: yup.string().required().email(),
     password: yup.string().required(),
   })
+
+  let registerSchema = yup.object().shape({
+    displayName: yup.string().trim().required(),
+    email: yup.string().trim().required().email(),
+    password: yup.string().trim().required(),
+})
 
   return (
     <Dialog
@@ -140,23 +156,33 @@ export default function IdentityForm({ open, handleClose, setAuthenticated }) {
               type='submit'
               style={{ marginTop: '32px', width: '100%', borderRadius: 0 }}
               variant="outlined"
-              onClick={() => {
-                dispatch(thirdParty());
-                handleClose(true);
-              }}
+              onClick={() => handleThirdPartyLogin('facebook')}
             >
-              Log in with facebook
+              Log in with Facebook
             </Button>
-            <LinearProgress className={progressClasses.root} />
+            <Button
+              startIcon={<FontAwesomeIcon icon={faGoogle} style={{fontSize: '16px'}} />}
+              type='submit'
+              style={{ marginTop: '32px', width: '100%', borderRadius: 0 }}
+              variant="outlined"
+              onClick={() => handleThirdPartyLogin('google')}
+            >
+              Log in with Google
+            </Button>
             <hr className="hr-text" data-content="OR" />
             <Formik
               initialValues={{ email: '', password: '', error: null }}
               validationSchema={loginSchema}
-              onSubmit={(values, { setSubmitting }) => {
-                console.log(values);
-                dispatch(signInUser(values));
-                setSubmitting(false);
-                handleClose(true);
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                try {
+                  await signInWithEmail(values);
+                  setSubmitting(false);
+                  handleClose(true);  
+                } catch (error) {
+                  setErrors({auth: 'Problem w/ email or password'})
+                  setSubmitting(false);
+                  console.log(error);
+                }
               }}
             >
               {({ handleSubmit, isSubmitting, errors }) => (
@@ -164,13 +190,13 @@ export default function IdentityForm({ open, handleClose, setAuthenticated }) {
                   <FormikTextInput name='email' label='Email' />
                   <FormikTextInput name='password' label='Password' type='password' />
                   {
-                    errors.error &&
+                    errors.auth &&
                     <List style={{ margin: 0, color: 'red' }}>
                       <ListItem style={{ paddingLeft: 0, paddingRight: 0 }}>
                         <ListItemIcon style={{ color: 'red', minWidth: '36px' }}>
                           <ErrorOutlineIcon />
                         </ListItemIcon>
-                        <ListItemText primary={errors.error} />
+                        <ListItemText primary={errors.auth} />
                       </ListItem>
                     </List>
                   }
@@ -184,6 +210,44 @@ export default function IdentityForm({ open, handleClose, setAuthenticated }) {
         </DialogContent>
         <DialogContent style={{ padding: 0 }}>
           <TabPanel value={value} index={1}>
+          <Formik
+              initialValues={{ displayName: '', email: '', password: '', error: null }}
+              validationSchema={registerSchema}
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                try {
+                  await registerInFirebase(values);
+                  setSubmitting(false);
+                  handleClose(true);  
+                } catch (error) {
+                  console.log('RIG', error)
+                  setErrors({auth: error.message});
+                  setSubmitting(false);
+                  console.log(error);
+                }
+              }}
+          >
+              {({ handleSubmit, isSubmitting, errors }) => (
+                  <Form className={classes.root} autoComplete='off'>
+                      <FormikTextInput name='displayName' label='Display Name' />
+                      <FormikTextInput name='email' label='Email' />
+                      <FormikTextInput type='password' name='password' label='Password' />
+                      {
+                        errors.auth &&
+                        <List style={{ margin: 0, color: 'red' }}>
+                          <ListItem style={{ paddingLeft: 0, paddingRight: 0 }}>
+                            <ListItemIcon style={{ color: 'red', minWidth: '36px' }}>
+                              <ErrorOutlineIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={errors.auth} />
+                          </ListItem>
+                        </List>
+                      }
+                      <Button type='submit' style={{ borderRadius: 0 }} variant="outlined">
+                          {isSubmitting ? <CircularProgress size={20} /> : 'Sign up'}
+                      </Button>
+                  </Form>
+              )}
+          </Formik>            
           </TabPanel>
         </DialogContent>
       </Container>

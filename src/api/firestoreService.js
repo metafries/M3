@@ -3,6 +3,16 @@ import firebase from '../config/firebase'
 
 const db = firebase.firestore();
 
+export function setUserProfileData(user) {
+    return db.collection('users').doc(user.uid).set({
+        displayName: user.displayName,
+        email: user.email,
+        username: user.email.slice(0, user.email.indexOf('@')),
+        photoURL: user.photoURL || '/',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+}
+
 export function dataFromSnapshot(snapshot) {
     if (!snapshot.exists) return undefined;
 

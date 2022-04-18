@@ -1,7 +1,7 @@
 import { THIRD_PARTY, SIGN_IN_USER, SIGN_OUT_USER } from "../constants/authConst";
 
 const initialState = {
-    authenticated: true,
+    authenticated: false,
     currentUser: null,
 }
 
@@ -12,8 +12,8 @@ export default function authRdc(state = initialState, {type, payload}) {
                 ...state,
                 authenticated: true,
                 currentUser: {
-                    email: '',
-                    photoURL: '/',
+                    email: payload.email,
+                    photoURL: payload.photoURL,
                 }
             }
         case SIGN_IN_USER:
@@ -22,7 +22,10 @@ export default function authRdc(state = initialState, {type, payload}) {
                 authenticated: true,
                 currentUser: {
                     email: payload.email,
-                    photoURL: '/',
+                    photoURL: payload.photoURL,
+                    uid: payload.uid,
+                    displayName: payload.displayName,
+                    providerId: payload.providerData[0].providerId,
                 }
             }
         case SIGN_OUT_USER:

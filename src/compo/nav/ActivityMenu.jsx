@@ -13,8 +13,12 @@ import { openModal } from '../../actions/commonActs'
 import ActivityDeleteConfirm from '../modal/ActivityDeleteConfirm';
 import { toggleActivityForm, handleMenuClose } from '../../actions/activityActs'
 
-function ActivityMenu() {
-    const { anchorEl, selectedActivity } = useSelector(state => state.activity)
+function ActivityMenu({
+    open,
+    anchorEl,
+    handleClose,
+}) {
+    const { selectedActivity } = useSelector(state => state.activity)
     const dispatch = useDispatch();
 
     const listItemIcon = {
@@ -47,7 +51,7 @@ function ActivityMenu() {
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={() => dispatch(handleMenuClose())}
+                onClose={() => handleClose()}
             >
                 {
                     selectedActivity &&
@@ -72,7 +76,7 @@ function ActivityMenu() {
                     <MenuItem
                         component={Link}
                         to={selectedActivity && `/edit/${selectedActivity.id}`}
-                        onClick={() => dispatch(handleMenuClose())}
+                        onClick={() => handleClose()}
                     >
                         <ListItemIcon style={listItemIcon}>
                             <EditOutlinedIcon />

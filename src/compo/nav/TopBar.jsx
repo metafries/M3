@@ -30,6 +30,8 @@ import { toggleActivityForm, handleSelected } from '../../actions/activityActs'
 import { signOutUser } from '../../actions/authActs'
 import { toggleDrawer } from '../../actions/commonActs';
 import ActivitySearch from '../popups/ActivitySearch'
+import { signOutFirebase } from '../../api/firebaseService';
+import PersonOutlineSharpIcon from '@material-ui/icons/PersonOutlineSharp';
 
 const drawerWidth = 'auto';
 const appBarBg = 'transparent';
@@ -126,8 +128,9 @@ function TopBar() {
     const classes = useStyles();
     const theme = useTheme();
     const { openDrawer } = useSelector(state => state.common);
-    const { authenticated } = useSelector(state => state.auth);
+    const { currentUser, authenticated } = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [openIdForm, setOpenIdForm] = React.useState(false);
 
@@ -145,6 +148,15 @@ function TopBar() {
         setOpenActivitySearch(false);
     }
     
+    const handleSignOut = async () => {
+        try {
+            history.push('/');
+            await signOutFirebase();
+            dispatch(toggleDrawer(openDrawer));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
     return (
         <div className={classes.root}>
@@ -169,7 +181,7 @@ function TopBar() {
                             to='/'
                             style={{ padding: 0 }}
                         >
-                            <img alt='metafries' style={logo} src='/metafries00.png' />
+                            <img alt='metafries' style={logo} src='/logo.png' />
                         </IconButton>
                     </Typography>
                     <IconButton
@@ -182,6 +194,16 @@ function TopBar() {
                         openActivitySearch={openActivitySearch}
                         closeActivitySearch={closeActivitySearch}
                     />
+                    <IconButton
+                        component={Link}
+                        to='/create'                    
+                        onClick={() => {
+                            dispatch(handleSelected(null));
+                        }}
+                        style={iconBtn}
+                    >
+                        <PostAddIcon style={tool} />
+                    </IconButton>
                     {
                         authenticated
                             ?   <IconButton
@@ -192,8 +214,8 @@ function TopBar() {
                                 >
                                     <StyledBadge color="secondary" variant='dot'>
                                         <Avatar
-                                            alt={'MELLO'}
-                                            src={'/'}
+                                            alt={currentUser.email}
+                                            src={currentUser.photoURL}
                                             className={classes.avatar}
                                         />
                                     </StyledBadge>
@@ -240,6 +262,21 @@ function TopBar() {
                     </ListItem>
                 </List>
                 <Divider style={divider} />
+
+                <List style={drawerOpts}>
+                    <ListItem
+                        button
+                        onClick={() => dispatch(toggleDrawer(openDrawer))}
+                        component={Link}
+                        to='/profile'
+                    >
+                        <ListItemIcon>
+                            <PersonOutlineSharpIcon style={drawerOpts} />
+                        </ListItemIcon>
+                        <ListItemText primary='PROFILE' />
+                    </ListItem>
+                </List>
+                <Divider style={divider} />
                 <List style={drawerOpts}>
                     <ListItem
                         button
@@ -250,23 +287,7 @@ function TopBar() {
                         <ListItemIcon>
                             <ThumbUpAltOutlinedIcon style={drawerOpts} />
                         </ListItemIcon>
-                        <ListItemText primary='RECOMMEND POSTS' />
-                    </ListItem>
-                </List>
-                <Divider style={divider} />
-                <List style={drawerOpts}>
-                    <ListItem
-                        component={Link}
-                        to='/create'                    
-                        onClick={() => {
-                            dispatch(handleSelected(null));
-                        }}
-                        button
-                    >
-                        <ListItemIcon>
-                            <PostAddIcon style={drawerOpts} />
-                        </ListItemIcon>
-                        <ListItemText primary='CREATE NEW POST' />
+                        <ListItemText primary='RECOMMEND' />
                     </ListItem>
                 </List>
                 <Divider style={divider} />
@@ -297,10 +318,7 @@ function TopBar() {
                 <Divider style={divider} />
                 <List style={drawerOpts}>
                     <ListItem
-                        onClick={() => {
-                            dispatch(signOutUser());
-                            dispatch(toggleDrawer(openDrawer));
-                        }}
+                        onClick={handleSignOut}
                         button
                     >
                         <ListItemIcon>

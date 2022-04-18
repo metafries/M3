@@ -1,6 +1,7 @@
 export const ASYNC_ACTION_START = 'ASYNC_ACTION_START'
 export const ASYNC_ACTION_FINISH = 'ASYNC_ACTION_FINISH'
 export const ASYNC_ACTION_ERROR = 'ASYNC_ACTION_ERROR'
+export const APP_LOADED = 'APP_LOADED'
 
 export function asyncActionStart() {
     return {
@@ -22,6 +23,7 @@ export function asyncActionError(error) {
 }
 
 const initialState = {
+    initialized: false,
     loading: false,
     error: null    
 }
@@ -44,6 +46,11 @@ export default function asyncRdc(state = initialState, {type, payload}) {
                 ...state,
                 loading: false,
                 error: payload
+            }
+        case APP_LOADED:
+            return {
+                ...state,
+                initialized: true,
             }
         default: 
             return state;
