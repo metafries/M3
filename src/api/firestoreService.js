@@ -3,6 +3,24 @@ import firebase from '../config/firebase'
 
 const db = firebase.firestore();
 
+export async function updateUserProfile(profile) {
+    const user = firebase.auth().currentUser;
+    try {
+        if (user.displayName !== profile.displayName) {
+            await user.updateProfile({
+                displayName: profile.displayName
+            })
+        }
+        return await db.collection('users').doc(user.uid).update(profile);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function getUserProfile(userId) {
+    return db.collection('users').doc(userId);
+}
+
 export function setUserProfileData(user) {
     return db.collection('users').doc(user.uid).set({
         displayName: user.displayName,

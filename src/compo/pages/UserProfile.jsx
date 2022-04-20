@@ -1,10 +1,21 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Card, CardHeader, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SettingsMenu from '../nav/SettingsMenu';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import UserClout from '../common/user/UserClout'
+import Button from '@material-ui/core/Button';
+import ProfileContent from '../tabs/ProfileContent';
+import useFireStoreDoc from '../../hooks/useFirestoreDoc'
+import useFirestoreDoc from '../../hooks/useFirestoreDoc';
+import { getUserProfile } from '../../api/firestoreService';
+import { listenToCurrentUserProfile, listenToSelectedUserProfile } from '../../actions/profileActs';
+import LoadingIndicator from '../common/utils/LoadingIndicator'
 
+const content = 'textSecondary';
 const actions = '#afadaa';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,10 +34,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function UserProfile() {
+export default function UserProfile({match}) {
     const classes = useStyles();
+
+    const dispatch = useDispatch();
+    const { loading } = useSelector(state => state.async);
+
+    const { currentUserProfile, selectedUserProfile } = useSelector(state => state.profile);
+    console.log('CURRENTUSER_PROFILE', currentUserProfile)
+    console.log('SELECTEDUSER_PROFILE', selectedUserProfile)
+
     const { currentUser } = useSelector(state => state.auth);
     console.log('CURRENTUSER', currentUser)
+
+    useFirestoreDoc({
+        query: () => getUserProfile(match.params.id),
+        data: profile => dispatch(listenToSelectedUserProfile(profile)),
+        deps: [dispatch, match.params.id],
+    })
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -39,29 +64,44 @@ export default function UserProfile() {
         setAnchorEl(null);
     };
 
+    if (loading || !currentUserProfile || !selectedUserProfile) return <LoadingIndicator/>
+
     return (
-        <Card className={classes.root}>
-            <CardHeader
-                avatar={
-                    <Avatar
-                        src={currentUser.photoURL || '/'}
-                        className={classes.avatar}
-                    />
-                }
-                action={
-                    <IconButton
-                        style={{ color: actions }}
-                        onClick={handleClick}
-                        aria-label="settings"
-                    >
-                        <MoreVertIcon />
-                    </IconButton>
-                }
-                title={currentUser.displayName}
-                subheader={currentUser.email}
-            >
-            </CardHeader>
-            <SettingsMenu open={open} anchorEl={anchorEl} handleClose={handleClose} />
-        </Card>
+        <React.Fragment>
+            <Card className={classes.root}>
+                <CardHeader
+                    avatar={
+                        <Avatar
+                            src={currentUser.photoURL || '/'}
+                            className={classes.avatar}
+                        />
+                    }
+                    action={                    
+                            <IconButton
+                                style={{ color: actions }}
+                                onClick={handleClick}
+                                aria-label="settings"
+                            >
+                                <MoreVertIcon />
+                            </IconButton>
+                    }
+                    title={currentUserProfile.displayName}
+                    subheader={currentUserProfile.username}
+                >
+                </CardHeader>
+                <SettingsMenu 
+                    isCurrentUser={currentUser.uid === selectedUserProfile.id}
+                    currentUserProfile={currentUserProfile}
+                    open={open} 
+                    anchorEl={anchorEl} 
+                    handleClose={handleClose} 
+                />
+                <hr />
+                <CardContent >
+                    <UserClout isCurrentUser={currentUser.uid === selectedUserProfile.id} />
+                </CardContent>
+            </Card>
+            <ProfileContent currentUserProfile={currentUserProfile} />
+        </React.Fragment>
     )
 }

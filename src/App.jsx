@@ -54,7 +54,7 @@ export default function App() {
               <TopBar />
               <Container style={{ paddingLeft: 0, paddingRight: 0 }} maxWidth='sm'>
                 <Switch>
-                  <Route exact path='/profile' component={UserProfile} />
+                  <Route exact path='/profile/:id' component={UserProfile} />
                   <Route exact path='/activities' component={ActivityList} />
                   <Route path='/activities/:id' component={ActivityItem} />
                   <Route path={['/create', '/edit/:id']} component={ActivityForm} key={key} />

@@ -129,6 +129,7 @@ function TopBar() {
     const theme = useTheme();
     const { openDrawer } = useSelector(state => state.common);
     const { currentUser, authenticated } = useSelector(state => state.auth);
+    const { currentUserProfile } = useSelector(state => state.profile);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -214,8 +215,8 @@ function TopBar() {
                                 >
                                     <StyledBadge color="secondary" variant='dot'>
                                         <Avatar
-                                            alt={currentUser.email}
-                                            src={currentUser.photoURL}
+                                            alt={currentUserProfile.email}
+                                            src={currentUserProfile.photoURL}
                                             className={classes.avatar}
                                         />
                                     </StyledBadge>
@@ -268,7 +269,7 @@ function TopBar() {
                         button
                         onClick={() => dispatch(toggleDrawer(openDrawer))}
                         component={Link}
-                        to='/profile'
+                        to={`/profile/${currentUserProfile.id}`}
                     >
                         <ListItemIcon>
                             <PersonOutlineSharpIcon style={drawerOpts} />
