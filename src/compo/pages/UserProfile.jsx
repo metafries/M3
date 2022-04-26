@@ -9,11 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import UserClout from '../common/user/UserClout'
 import Button from '@material-ui/core/Button';
 import ProfileContent from '../tabs/ProfileContent';
-import useFireStoreDoc from '../../hooks/useFirestoreDoc'
 import useFirestoreDoc from '../../hooks/useFirestoreDoc';
 import { getUserProfile } from '../../api/firestoreService';
 import { listenToCurrentUserProfile, listenToSelectedUserProfile } from '../../actions/profileActs';
 import LoadingIndicator from '../common/utils/LoadingIndicator'
+import useFirestoreCollection from '../../hooks/useFirestoreCollection'
+import { getUserPhotos } from '../../api/firestoreService';
+import { listenToUserPhotos } from '../../actions/profileActs'
 
 const content = 'textSecondary';
 const actions = '#afadaa';
@@ -64,7 +66,7 @@ export default function UserProfile({match}) {
         setAnchorEl(null);
     };
 
-    if (loading || !currentUserProfile || !selectedUserProfile) return <LoadingIndicator/>
+    if (!selectedUserProfile ) return <LoadingIndicator/>
 
     return (
         <React.Fragment>
@@ -72,7 +74,7 @@ export default function UserProfile({match}) {
                 <CardHeader
                     avatar={
                         <Avatar
-                            src={currentUser.photoURL || '/'}
+                            src={selectedUserProfile.photoURL}
                             className={classes.avatar}
                         />
                     }
@@ -85,8 +87,8 @@ export default function UserProfile({match}) {
                                 <MoreVertIcon />
                             </IconButton>
                     }
-                    title={currentUserProfile.displayName}
-                    subheader={currentUserProfile.username}
+                    title={selectedUserProfile.displayName}
+                    subheader={selectedUserProfile.username}
                 >
                 </CardHeader>
                 <SettingsMenu 
@@ -98,10 +100,14 @@ export default function UserProfile({match}) {
                 />
                 <hr />
                 <CardContent >
-                    <UserClout isCurrentUser={currentUser.uid === selectedUserProfile.id} />
+                    <UserClout 
+                        isCurrentUser={currentUser.uid === selectedUserProfile.id} 
+                    />
                 </CardContent>
             </Card>
-            <ProfileContent currentUserProfile={currentUserProfile} />
+            <ProfileContent 
+                profile={selectedUserProfile} 
+            />
         </React.Fragment>
     )
 }

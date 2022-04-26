@@ -4,6 +4,7 @@ import { Typography } from "@material-ui/core";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
+import { signOutFirebase } from '../../api/firebaseService';
 
 const logo = { height: '25px', width: 'auto' };
 

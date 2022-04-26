@@ -3,6 +3,52 @@ import firebase from '../config/firebase'
 
 const db = firebase.firestore();
 
+export function deletePhotoFromCollection(photoId) {
+    const uuid = firebase.auth().currentUser.uid;
+    return db.collection('users').doc(uuid).collection('photos').doc(photoId).delete();
+}
+
+export async function setMainPhoto(photo) {
+    const user = firebase.auth().currentUser;
+    try {
+        await db.collection('users').doc(user.uid).update({
+            photoURL: photo.url,
+        })
+        return user.updateProfile({
+            photoURL: photo.url,
+        })
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function getUserPhotos(uuid) {
+    return db.collection('users').doc(uuid).collection('photos');
+}     
+
+export async function updateUserProfilePhoto(downloadURL, filename) {
+    const user = firebase.auth().currentUser;
+    const userDocRef = db.collection('users').doc(user.uid); 
+    try {
+        const userDoc = await userDocRef.get();
+        if (userDoc.data().photoURL === '/') {
+            await db.collection('users').doc(user.uid).update({
+                photoURL: downloadURL,
+            });
+            await user.updateProfile({
+                photoURL: downloadURL,
+            })
+        }
+        return await db.collection('users').doc(user.uid).collection('photos').add({
+            name: filename,
+            url: downloadURL,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function updateUserProfile(profile) {
     const user = firebase.auth().currentUser;
     try {
@@ -17,8 +63,8 @@ export async function updateUserProfile(profile) {
     }
 }
 
-export function getUserProfile(userId) {
-    return db.collection('users').doc(userId);
+export function getUserProfile(uid) {
+    return db.collection('users').doc(uid);
 }
 
 export function setUserProfileData(user) {

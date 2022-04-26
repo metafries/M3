@@ -2,14 +2,14 @@ import { Container, Typography } from '@material-ui/core'
 import React from 'react'
 import { format } from 'date-fns'
 
-export default function AboutTab({ currentUserProfile }) {
+export default function AboutTab({ profile }) {
     return (
         <React.Fragment>
             <Typography style={{ margin: '20px', color: '#fff' }}>
-                Joined {format(currentUserProfile.createdAt, 'dd MMM yyyy')}
+                Joined {format(profile.createdAt, 'dd MMM yyyy')}
             </Typography>
             <Typography style={{ margin: '20px', color: '#fff' }}>
-                {currentUserProfile.description}
+                {profile.description}
             </Typography>
         </React.Fragment>
     )

@@ -215,8 +215,8 @@ function TopBar() {
                                 >
                                     <StyledBadge color="secondary" variant='dot'>
                                         <Avatar
-                                            alt={currentUserProfile.email}
-                                            src={currentUserProfile.photoURL}
+                                            alt={currentUserProfile && currentUserProfile.displayName}
+                                            src={currentUserProfile && currentUserProfile.photoURL}
                                             className={classes.avatar}
                                         />
                                     </StyledBadge>
@@ -269,7 +269,7 @@ function TopBar() {
                         button
                         onClick={() => dispatch(toggleDrawer(openDrawer))}
                         component={Link}
-                        to={`/profile/${currentUserProfile.id}`}
+                        to={`/profile/${currentUserProfile && currentUserProfile.id}`}
                     >
                         <ListItemIcon>
                             <PersonOutlineSharpIcon style={drawerOpts} />

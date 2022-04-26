@@ -11,6 +11,7 @@ import ActivityChat from '../../popups/ActivityChat'
 import { cancelActivityToggle, deleteActivityInFirestore } from '../../../api/firestoreService';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleSelected } from '../../../actions/activityActs';
+import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
 
 const active = '#987000';
 const inactive = '#a9a9a9';

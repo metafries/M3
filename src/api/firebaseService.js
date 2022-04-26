@@ -1,6 +1,16 @@
 import firebase from '../config/firebase'
 import { setUserProfileData } from './firestoreService';
 
+export function deleteFromFirestoreStorage(filename) {
+    const uuid = firebase.auth().currentUser.uid;
+    return firebase.storage().ref().child(`${uuid}/user_images/${filename}`).delete();
+}
+
+export function uploadToFirebaseStorage(file, filename) {
+    const uuid = firebase.auth().currentUser.uid;
+    return firebase.storage().ref().child(`${uuid}/user_images/${filename}`).put(file);
+}
+
 export function updateUserPassword(creds) {
     return firebase.auth().currentUser.updatePassword(creds.newPwd);
 }
