@@ -11,6 +11,7 @@ import GoogleMap from '../../popups/GoogleMap';
 const content = 'textSecondary';
 const CustomBtn = withStyles({
     root: {
+        textAlign: 'left',
         color: '#afadaa',
         padding: 0,
     }
@@ -21,23 +22,25 @@ function ActivityInfo({ activity }) {
     const [openMap, setOpenMap] = React.useState(false);
 
     return (
-        <CardContent style={{ paddingTop: 0 }}>
-            <ActivityClout 
-                activity={activity} 
-                openActivityClout={openClout} 
-                setOpenActivityClout={setOpenClout} 
+        <CardContent>
+            <ActivityClout
+                activity={activity}
+                openActivityClout={openClout}
+                setOpenActivityClout={setOpenClout}
             />
-            <GoogleMap 
-                activity={activity} 
-                openMap={openMap} 
-                setOpenMap={setOpenMap} 
+            <GoogleMap
+                activity={activity}
+                openMap={openMap}
+                setOpenMap={setOpenMap}
             />
             <ActivityStatus activity={activity} />
+
             <Typography color={content}>
                 <CustomBtn onClick={() => setOpenClout(true)}>
                     {`-- Interested · ${activity.attendees.length} Going`}
                 </CustomBtn>
             </Typography>
+
             <Typography color={content}>
                 {format(activity.date, 'dd MMM yyyy h:mm aa')}
             </Typography>
@@ -46,6 +49,7 @@ function ActivityInfo({ activity }) {
                     {activity.venue.address}
                 </CustomBtn>
             </Typography>
+
         </CardContent>
     )
 }

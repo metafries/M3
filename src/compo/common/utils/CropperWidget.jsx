@@ -2,7 +2,8 @@ import React, { useRef } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-export default function PhotoWidgetCropper({
+export default function CropperWidget({
+    aspectRatio,
     setImage,
     setPreview,
     imagePreview,
@@ -24,9 +25,9 @@ export default function PhotoWidgetCropper({
     return (
         <Cropper
             src={imagePreview}
-            aspectRatio={1}
+            aspectRatio={aspectRatio}
             guides={false}
-            viewMode={1}
+            viewMode={0}
             dragMode='move'
             scalable={true}
             cropBoxMovable={true}

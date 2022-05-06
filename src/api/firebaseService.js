@@ -1,6 +1,10 @@
 import firebase from '../config/firebase'
 import { setUserProfileData } from './firestoreService';
 
+export function uploadPosterToStorage(auid, file, filename) {
+    return firebase.storage().ref().child(`${auid}/posters/${filename}`).put(file);
+}
+
 export function deleteFromFirestoreStorage(filename) {
     const uuid = firebase.auth().currentUser.uid;
     return firebase.storage().ref().child(`${uuid}/user_images/${filename}`).delete();

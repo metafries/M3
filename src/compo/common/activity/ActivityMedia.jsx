@@ -11,13 +11,13 @@ const useStyles = makeStyles((theme) =>
     }),
 );
 
-export default function ActivityMedia({category}) {
+export default function ActivityMedia({posterURL, category}) {
     const classes = useStyles();
     
     return (
         <CardMedia
             className={classes.media}
-            image={`/categoryImages/${category}.jpeg`}
+            image={posterURL || `/categoryImages/${category}text.png`}
             title={category}
         />
     )

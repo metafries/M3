@@ -17,6 +17,11 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns'
 import { handleSelected, handleMenuClick } from '../../actions/activityActs'
 import ActivityMenu from '../nav/ActivityMenu';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import ActivityInfo from '../common/activity/ActivityInfo';
+import { useSelector, useDispatch } from 'react-redux'
 
 const actions = '#afadaa';
 const content = 'textSecondary';
@@ -62,6 +67,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 function ActivityListItem({ activity }) {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
@@ -72,36 +78,34 @@ function ActivityListItem({ activity }) {
     return (
         <Card className={classes.root}>
             <ActivityHeader
-                key={activity.id} 
+                key={activity.id}
                 menuStyle={menuStyle}
                 activity={activity}
             />
-            <Link to={`/activities/${activity.id}`}>
+
+            <Link onClick={() => dispatch(handleSelected(activity))} to={`/activities/${activity.id}`}>
                 <div style={{ position: 'relative' }}>
                     <CardMedia
                         className={classes.media}
-                        image={`/categoryImages/${activity.category}.jpeg`}
+                        image={activity.posterURL || `/categoryImages/${activity.category}text.png`}
                         title={activity.category}
                     />
                     <div className={classes.overlay}>
-                        <div style={{ position: 'absolute', bottom: '16px' }}>
-                            <ActivityStatus activity={activity} />
-                            <Typography color={content}>
-                                {`-- Interested · ${activity.attendees.length} Going`}
-                            </Typography>
-                            <Typography color={content}>
-                                {format(activity.date, 'dd MMM yyyy h:mm aa')}
-                            </Typography>
+                        <div style={{ position: 'absolute', bottom: 0, left: 0 }}>
+
+                            <ActivityInfo activity={activity} />
+
+
                         </div>
                     </div>
                 </div>
             </Link>
-            <CardActions disableSpacing>
+            <CardActions  disableSpacing>
                 <ActivityActions
                     activity={activity}
                 />
                 <IconButton
-                    style={{ color: actions }}
+                    style={{ color: '#afadaa' }}
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
                     })}
@@ -113,8 +117,9 @@ function ActivityListItem({ activity }) {
                 </IconButton>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <ActivityTags category={activity.category} />
                 <ActivityDesc description={activity.description} />
+                <ActivityTags category={activity.category} />
+
             </Collapse>
         </Card>
     );

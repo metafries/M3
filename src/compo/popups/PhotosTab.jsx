@@ -1,6 +1,6 @@
 import React from 'react'
-import { AppBar, Button, Dialog } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { AppBar, Button, CardContent, Dialog } from '@material-ui/core'
+import { withStyles, makeStyles, createStyles } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -24,11 +24,20 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import PhotosMenu from '../nav/PhotosMenu';
+import StarOutlineIcon from '@material-ui/icons/StarOutline';
 
 const actions = '#afadaa';
 
 const active = '#987000';
 const inactive = '#a9a9a9';
+
+const CustomBtn = withStyles({
+    root: {
+        textAlign: 'left',
+        color: '#afadaa',
+        padding: 0,
+    }
+})(Button);
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -151,14 +160,17 @@ export default function PhotosTab({
                             />
                             <CardActions disableSpacing>
                                 <IconButton style={{ color: inactive }} aria-label="favorite">
-                                    <FavoriteBorderIcon />
+                                    <StarOutlineIcon />
                                 </IconButton>
+                                <CustomBtn>
+                                    {`- -`}
+                                </CustomBtn>
                                 <IconButton style={{ color: inactive }} aria-label="chat">
                                     <ChatOutlinedIcon />
                                 </IconButton>
                                 <IconButton style={{ color: inactive }} aria-label="share">
                                     <ShareOutlinedIcon />
-                                </IconButton>                                
+                                </IconButton>
                                 <IconButton
                                     style={{ marginLeft: 'auto', color: actions }}
                                     onClick={(e) => {

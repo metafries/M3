@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import { state } from './config/state';
 import ScrollToTop from './compo/common/utils/ScrollToTop';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const store = state();
 

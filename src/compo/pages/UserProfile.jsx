@@ -98,7 +98,7 @@ export default function UserProfile({match}) {
                     anchorEl={anchorEl} 
                     handleClose={handleClose} 
                 />
-                <hr />
+                <hr style={{borderColor: '#afadaa'}} />
                 <CardContent >
                     <UserClout 
                         isCurrentUser={currentUser.uid === selectedUserProfile.id} 

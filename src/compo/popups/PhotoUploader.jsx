@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import HorizontalLinearStepper from '../common/utils/HorizontalLinearStepper';
+import PhotoHLStepper from '../steps/PhotoHLStepper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,26 +37,26 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function PhotoUploadWidget({
-    openPUW,
-    setOpenPUW,
+export default function PhotoUploader({
+    openPhotoUploader,
+    setOpenPhotoUploader,
 }) {
     const classes = useStyles();
     
     const handleUploadCompleted = () => {
-        setOpenPUW(false);
+        setOpenPhotoUploader(false);
     }
 
     return (
         <Dialog
             fullScreen
-            open={openPUW}
+            open={openPhotoUploader}
             TransitionComponent={Transition}
         >
-                        <AppBar className={classes.appBar}>
+            <AppBar className={classes.appBar}>
                 <Toolbar>
                     <IconButton
-                        onClick={() => setOpenPUW(false)}
+                        onClick={() => setOpenPhotoUploader(false)}
                         edge="start"
                     >
                         <ArrowBackIosIcon />
@@ -67,7 +67,7 @@ export default function PhotoUploadWidget({
                 </Toolbar>
             </AppBar>   
             <Container style={{ marginTop: '85px' }} maxWidth='sm'>
-                <HorizontalLinearStepper handleUploadCompleted={handleUploadCompleted} />
+                <PhotoHLStepper handleUploadCompleted={handleUploadCompleted} />
             </Container>    
         </Dialog>
     )

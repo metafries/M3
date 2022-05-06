@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setMainPhoto } from '../../api/firestoreService';
 import PhotoDeleteConfirm from '../modal/PhotoDeleteConfirm';
 import { openModal } from '../../actions/commonActs'
+import FlagOutlinedIcon from '@material-ui/icons/FlagOutlined';
 
 export default function PhotosMenu({
     anchorEl,
@@ -16,7 +17,7 @@ export default function PhotosMenu({
     const dispatch = useDispatch();
 
     const { selectedPhoto } = useSelector(state => state.profile);
-    
+
     const [updating, setUpdating] = React.useState(false);
     const handleSetMainPhoto = async (photo) => {
         setUpdating(true);
@@ -27,7 +28,7 @@ export default function PhotosMenu({
         } finally {
             setUpdating(false);
         }
-    }    
+    }
 
     const listItemIcon = {
         minWidth: '40px',
@@ -60,17 +61,23 @@ export default function PhotosMenu({
             open={Boolean(anchorEl)}
             onClose={() => handleClose()}
         >
-            <MenuItem onClick={() => handleSetMainPhoto(selectedPhoto) }>
+            <MenuItem onClick={() => handleSetMainPhoto(selectedPhoto)}>
                 <ListItemIcon style={listItemIcon}>
-                    { updating ? <CircularProgress style={{ color: '#fff' }} size={18} /> : <AccountBoxSharpIcon /> }            
-                </ListItemIcon>                
+                    {updating ? <CircularProgress style={{ color: '#fff' }} size={18} /> : <AccountBoxSharpIcon />}
+                </ListItemIcon>
                 <Typography>Main </Typography>
-            </MenuItem>            
+            </MenuItem>
             <MenuItem onClick={() => dispatch(openModal(<PhotoDeleteConfirm handleClose={handleClose} />))}>
                 <ListItemIcon style={listItemIcon}>
                     <DeleteOutlineIcon />
                 </ListItemIcon>
                 <Typography>Delete</Typography>
+            </MenuItem>
+            <MenuItem>
+                <ListItemIcon style={listItemIcon}>
+                    <FlagOutlinedIcon />
+                </ListItemIcon>
+                <Typography>Report</Typography>
             </MenuItem>
         </Menu>
     )

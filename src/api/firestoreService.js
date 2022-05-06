@@ -1,5 +1,6 @@
 import cuid from 'cuid';
 import firebase from '../config/firebase'
+import { uploadPosterToStorage } from './firebaseService';
 
 const db = firebase.firestore();
 
@@ -32,17 +33,17 @@ export async function updateUserProfilePhoto(downloadURL, filename) {
     try {
         const userDoc = await userDocRef.get();
         if (userDoc.data().photoURL === '/') {
-            await db.collection('users').doc(user.uid).update({
+            await userDocRef.update({
                 photoURL: downloadURL,
             });
             await user.updateProfile({
                 photoURL: downloadURL,
             })
         }
-        return await db.collection('users').doc(user.uid).collection('photos').add({
+        return await userDocRef.collection('photos').add({
             name: filename,
             url: downloadURL,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
     } catch (error) {
         throw error;
@@ -98,6 +99,7 @@ export function dataFromSnapshot(snapshot) {
 export function addActivityToFirestore(activity) {
     return db.collection('activities').add({
         ...activity,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         hostedBy: 'Gojo',
         hostPhotoURL: 'https://tva1.sinaimg.cn/large/0082tP5Hly1gl08cju854j30ir0p0di2.jpg',
         attendees: firebase.firestore.FieldValue.arrayUnion({
@@ -106,6 +108,22 @@ export function addActivityToFirestore(activity) {
             photoURL: 'https://tva1.sinaimg.cn/large/0082tP5Hly1gl08cju854j30ir0p0di2.jpg'
         })
     })
+}
+
+export async function setActivityPoster(auid, downloadURL, filename) {
+    const d_ref = db.collection('activities').doc(auid);
+    try {
+        await d_ref.update({
+            posterURL: downloadURL,
+        })
+        return await d_ref.collection('posters').add({
+            name: filename,
+            url: downloadURL,
+            uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+    } catch (error) {
+        throw error
+    }
 }
 
 export function cancelActivityToggle(activity) {

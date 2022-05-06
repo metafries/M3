@@ -1,20 +1,23 @@
 import React from 'react';
 import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
+import { Button } from '@material-ui/core';
 
 export default function ActivityTags({ category }) {
     return (
-        <CardContent style={{ paddingTop: 0 }}>
-            <Chip
+        <CardContent style={{ paddingLeft: 0, paddingTop: 0, }}>
+            <Button
                 size="small"
                 style={{
-                    background: '#424242',
-                    color: 'whitesmoke',
+                    color: '#afadaa',
                     borderRadius: 0,
-                    marginTop: '15px'
+                    marginTop: '15px',
+                    padding: 0,
                 }}
-                label={category}
-            />
+            >
+                {`#${category}`}
+            </Button>
         </CardContent>
+
     )
 }

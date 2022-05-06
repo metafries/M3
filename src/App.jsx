@@ -16,7 +16,8 @@ import ActivityMenu from './compo/nav/ActivityMenu'
 import UserProfile from './compo/pages/UserProfile';
 import { useSelector } from 'react-redux';
 import LoadingIndicator from './compo/common/utils/LoadingIndicator';
-
+import { ToastContainer } from 'react-toastify';
+import './App.css'
 
 const custom = createTheme({
   palette: {
@@ -45,6 +46,7 @@ export default function App() {
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <MuiThemeProvider theme={custom}>
         <CssBaseline />
+        <ToastContainer position='bottom-right' closeButton={false} />
         <ModalContainer />
         <Route exact path='/' component={LandingPage} />
         <Route

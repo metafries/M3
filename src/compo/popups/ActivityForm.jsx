@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
+import { Input, List, ListItem, ListItemIcon, ListItemText, TextField } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,15 +26,23 @@ import * as yup from 'yup';
 import FormikPlaceInput from '../common/utils/FormikPlaceInput';
 import { toggleDrawer } from '../../actions/commonActs';
 import useFirestoreDoc from '../../hooks/useFirestoreDoc';
-import { addActivityToFirestore, listenToActivityFromFirestore, updateActivityInFirestore } from '../../api/firestoreService';
+import { addActivityToFirestore, listenToActivityFromFirestore, setActivityPoster, updateActivityInFirestore } from '../../api/firestoreService';
 import Errors from '../common/utils/Errors';
 import LoadingIndicator from '../common/utils/LoadingIndicator';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, FormHelperText } from '@material-ui/core';
+import PosterHLStepper from '../steps/PosterHLStepper';
+import DropzoneWidget from '../common/utils/DropzoneWidget';
+import CropperWidget from '../common/utils/CropperWidget';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import { toast } from 'react-toastify';
+import { getFileExtension } from '../../util';
+import { uploadPosterToStorage } from '../../api/firebaseService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       marginTop: theme.spacing(4),
+      marginBottom: '5px',
       width: '100%',
     },
   },
@@ -56,17 +62,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function ActivityForm({ match }) {
+
   const { error, loading } = useSelector(state => state.async);
   const { openDrawer } = useSelector(state => state.common);
-  const selectedActivity = useSelector(state =>
-    state.activity.activities.find(a => a.id === match.params.id));
+  const selectedActivity = useSelector(state => state.activity.activities.find(a => a.id === match.params.id));
+
+  const [files, setFiles] = React.useState([]);
+  const [image, setImage] = React.useState(selectedActivity ? selectedActivity.posterURL : null);
+  const [preview, setPreview] = React.useState(selectedActivity ? selectedActivity.posterURL : null);
+  const [uploading, setUploading] = React.useState(false);
 
   const dispatch = useDispatch();
   useFirestoreDoc({
     query: () => listenToActivityFromFirestore(match.params.id),
     data: activity => dispatch(listenToActivities([activity])),
     deps: [match.params.id, dispatch]
-  })  
+  })
 
   const initialValues = selectedActivity ?? {
     id: '',
@@ -92,6 +103,7 @@ export default function ActivityForm({ match }) {
 
   const [closeRoute, setCloseRoute] = useState('/');
   useEffect(() => {
+    selectedActivity ? setActivity(selectedActivity) : setActivity(initialValues);
     selectedActivity ? setCloseRoute(`/activities/${id}`) : setCloseRoute('/activities');
   }, [id, selectedActivity])
 
@@ -108,32 +120,61 @@ export default function ActivityForm({ match }) {
     }),
   })
 
-  const handleFormSubmit = async (activity) => {
-    if (activity.id.length !== 0) {
-      await updateActivityInFirestore(activity);
-      dispatch(handleMenuClose());
-      history.push(`/activities/${activity.id}`)
-    } else {
-      await addActivityToFirestore(activity);
-      dispatch(toggleDrawer(openDrawer));
-      history.push(`/activities`);
-    }
+  const handleUploadImage = (auid) => {
+    const filename = files[0] ? cuid() + '.' + getFileExtension(files[0].name) : '';
+    const uploadTask = uploadPosterToStorage(auid, image, filename);
+    uploadTask.on('state_changed', snapshot => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+    }, error => {
+      console.log('1st', error.message);
+      setUploading(false);
+    }, () => {
+      uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+        setActivityPoster(auid, downloadURL, filename).then(() => {
+          setFiles([]);
+          setImage(null);
+        }).catch(error => {
+          console.log('2nd', error.messge)
+        });
+      })
+    })
   }
 
-  useEffect(() => {
-    console.log('real time change preview of activity object :', activity);
-  }, [activity]);
+  const handleFormSubmit = async (activity) => {
+    setActivity(activity);
+    if (activity.id.length !== 0) {
+      setUploading(true);
+      await updateActivityInFirestore(activity);
+      if (files.length > 0) {
+        await handleUploadImage(activity.id);
+      }
+      setUploading(false);
+      history.push(`/activities/${activity.id}`)
+    } else {
+      if (files.length > 0) {
+        setUploading(true);
+        const newpost = await addActivityToFirestore(activity);
+        await handleUploadImage(newpost.id);
+        setUploading(false);
+        history.push(`/activities/${newpost.id}`);
+      } else {
+        toast.error('Poster is required');
+      }
+    }
+  }
 
   const classes = useStyles();
 
   if (match.path != '/create' && error) return <Errors error={error} />
   if (loading) return <LoadingIndicator />
 
+
   return (
     <Formik
       validationSchema={schema}
       enableReinitialize
-      initialValues={initialValues}
+      initialValues={activity}
       onSubmit={values => {
         try {
           handleFormSubmit(values);
@@ -142,7 +183,7 @@ export default function ActivityForm({ match }) {
         }
       }}
     >
-      {({ isSubmitting, handleSubmit, dirty, values }) => (
+      {({ handleSubmit, dirty, values }) => (
         <Dialog
           fullScreen
           open={true}
@@ -165,19 +206,19 @@ export default function ActivityForm({ match }) {
                 {selectedActivity ? 'EDIT' : 'CREATE'}
               </Typography>
               {
-                isSubmitting
+                uploading
                   ? <CircularProgress size={24} />
                   : <Button
-                      disabled={!dirty}
-                      size='large'
-                      onClick={() => handleSubmit()}
-                    >
-                      SUBMIT
+                    disabled={!dirty && files.length === 0}
+                    size='large'
+                    onClick={() => handleSubmit()}
+                  >
+                    SUBMIT
                     </Button>
               }
             </Toolbar>
           </AppBar>
-          <Container style={{ marginTop: '55px' }} maxWidth='sm'>
+          <Container style={{ marginTop: '55px', marginBottom: '55px' }} maxWidth='sm'>
             <Form className={classes.root} autoComplete='off'>
               <FormikTextInput name='title' label='Title' />
               <FormikTextArea name='description' label='Description' maxRows={4} />
@@ -194,7 +235,20 @@ export default function ActivityForm({ match }) {
                   types: ['establishment']
                 }}
               />
+              <TextField disabled name='poster' label="Poster" value={files.length > 0 ? files[0].name : ' '} />
             </Form>
+            <img src={preview} style={{ width: '100%' }} />
+            {
+              files.length > 0 &&
+              <CropperWidget
+                aspectRatio={16 / 9}
+                setImage={setImage}
+                setPreview={setPreview}
+                imagePreview={files.length > 0 ? files[0].preview : ''}
+              />
+
+            }
+            <DropzoneWidget files={files} setFiles={setFiles} />
           </Container>
         </Dialog>
       )}

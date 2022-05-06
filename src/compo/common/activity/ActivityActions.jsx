@@ -11,10 +11,18 @@ import ActivityChat from '../../popups/ActivityChat'
 import { cancelActivityToggle, deleteActivityInFirestore } from '../../../api/firestoreService';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleSelected } from '../../../actions/activityActs';
-import GradeOutlinedIcon from '@material-ui/icons/GradeOutlined';
+import LocalAtmSharpIcon from '@material-ui/icons/LocalAtmSharp';
+import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined';
+import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
+import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import StarOutlineIcon from '@material-ui/icons/StarOutline';
+import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
+import ActivityCancelConfirm from '../../modal/ActivityCancelConfirm';
+import { openModal } from '../../../actions/commonActs'
 
 const active = '#987000';
-const inactive = '#a9a9a9';
+const inactive = '#afadaa';
 
 function ActivityActions({
     activity,
@@ -30,42 +38,25 @@ function ActivityActions({
     return (
         <React.Fragment>
             <ActivityChat activity={activity} openChat={openChat} setOpenChat={setOpenChat} />
+
             <IconButton
-                onClick={() => {
-                    dispatch(handleSelected(activity));
-                    cancelActivityToggle(activity);                    
-                }}
-                style={{ color: isCancelled }}
-                aria-label="cancel"
+                disabled={activity.isCancelled}
+                style={{ color: inactive }}
+                aria-label="interested"
             >
-                {
-                    false && (selectedActivity.id === activity.id)
-                        ? <CircularProgress size={20} />
-                        : <BlockIcon />
-                }
-            </IconButton>
-            <IconButton style={{ color: inactive }} aria-label="interested">
-                <GradeIcon />
-            </IconButton>
-            <IconButton
-                onClick={() => {
-                    dispatch(handleSelected(activity));
-                }}
-                style={{ color: isGoing }}
-                aria-label="going"
-            >
-                <CheckCircleIcon />
+                <StarOutlineIcon />
             </IconButton>
             <IconButton
                 onClick={(e) => setOpenChat(true)}
-                style={{ color: active }}
+                style={{ color: inactive }}
                 aria-label="chat"
             >
-                <ChatIcon />
+                <ChatOutlinedIcon />
             </IconButton>
             <IconButton style={{ color: inactive }} aria-label="share">
-                <ShareIcon />
+                <ShareOutlinedIcon />
             </IconButton>
+
         </React.Fragment>
     )
 }

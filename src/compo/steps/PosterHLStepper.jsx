@@ -7,14 +7,15 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { grey, green, purple } from '@material-ui/core/colors';
-import PhotoWidgetDropzone from '../../steps/PhotoWidgetDropzone';
+import DropzoneWidget from '../common/utils/DropzoneWidget';
 import Container from '@material-ui/core/Container';
-import PhotoWidgetCropper from '../../steps/PhotoWidgetCropper';
+import CropperWidget from '../common/utils/CropperWidget';
 import cuid from 'cuid';
-import { getFileExtension } from '../../../util';
-import { uploadToFirebaseStorage } from '../../../api/firebaseService';
-import { updateUserProfilePhoto } from '../../../api/firestoreService';
+import { getFileExtension } from '../../util';
+import { uploadPosterToStorage, uploadToFirebaseStorage } from '../../api/firebaseService';
+import { setActivityPoster, updateUserProfilePhoto } from '../../api/firestoreService';
 import { CircularProgress } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +39,7 @@ function getSteps() {
   return ['Select', 'Resize', 'Preview'];
 }
 
-export default function HorizontalLinearStepper({handleUploadCompleted}) {
+export default function PosterHLStepper({auid, handleUploadCompleted}) {
   const [files, setFiles] = React.useState([]);
   const [image, setImage] = React.useState(null);
   const [preview, setPreview] = React.useState(null);
@@ -47,11 +48,11 @@ export default function HorizontalLinearStepper({handleUploadCompleted}) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const steps = getSteps();
+  const steps = getSteps();  
 
   const handleUploadImage = () => {
       const filename = files[0] ? cuid() + '.' + getFileExtension(files[0].name) : '';
-      const uploadTask = uploadToFirebaseStorage(image, filename);
+      const uploadTask = uploadPosterToStorage(auid, image, filename);
       uploadTask.on('state_changed', snapshot => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;          
         console.log('Upload is ' + progress + '% done');        
@@ -60,7 +61,7 @@ export default function HorizontalLinearStepper({handleUploadCompleted}) {
         setUploading(false);
       }, () => {
         uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-            updateUserProfilePhoto(downloadURL, filename).then(() => {
+            setActivityPoster(auid, downloadURL, filename).then(() => {
                 setUploading(false);
                 setFiles([]);
                 setImage(null);
@@ -76,9 +77,10 @@ export default function HorizontalLinearStepper({handleUploadCompleted}) {
   const getStepContent = (step) => {
     switch (step) {
         case 0:
-            return  <PhotoWidgetDropzone files={files} setFiles={setFiles} />;
+            return  <DropzoneWidget files={files} setFiles={setFiles} />;
         case 1:
-            return  <PhotoWidgetCropper 
+            return  <CropperWidget 
+                        aspectRatio={16/9}
                         setImage={setImage} 
                         setPreview={setPreview}
                         imagePreview={files.length > 0 ? files[0].preview : ''} 

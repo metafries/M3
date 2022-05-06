@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Dropzone from 'react-dropzone'
 import { Typography } from '@material-ui/core';
+import PublishSharpIcon from '@material-ui/icons/PublishSharp';
 
 const baseStyle = {
     padding: '20px',
@@ -24,7 +25,7 @@ const rejectStyle = {
     backgroundColor: '#f5f5f5',
 };
 
-export default function PhotoWidgetDropzone({ files, setFiles }) {
+export default function DropzoneWidget({ files, setFiles }) {
 
     const onDrop = useCallback(acceptedFiles => {
         // Do something with the files
@@ -51,17 +52,16 @@ export default function PhotoWidgetDropzone({ files, setFiles }) {
                     <div {...getRootProps()} style={isDragReject ? { ...rejectStyle } : { ...baseStyle }}>
                         <input {...getInputProps()} />
                         {
-                            !isDragActive && <Typography>Drag 'n' drop some files here, or click to select files</Typography>
+                            !isDragActive && <Typography>Drag 'n' drop a file here, or click to select a file</Typography>
                         }
                         {
                             !isDragReject && isDragActive &&
-                            <Typography>Drop the files here ...</Typography>
+                            <Typography>Drop the file here ...</Typography>
                         }
                         {
                             isDragReject && <Typography>Invalid file type ...</Typography>
                         }
-                    </div>
-                    {files.length > 0 && files[0].name}
+                    </div>                
                 </section>
             )}
         </Dropzone>
