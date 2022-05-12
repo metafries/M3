@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function ActivityHeader({
+    isHost,
     menuStyle,
     activity,
 }) {
@@ -40,10 +41,9 @@ export default function ActivityHeader({
         setAnchorEl(null);
     };
 
-    
     return (
         <React.Fragment>
-            <ActivityMenu open={open} anchorEl={anchorEl} handleClose={handleClose} />
+            <ActivityMenu isHost={isHost} open={open} anchorEl={anchorEl} handleClose={handleClose} />
             <CardHeader
                 avatar={
                     <AvatarGroup max={2}>

@@ -37,7 +37,11 @@ function ActivityInfo({ activity }) {
 
             <Typography color={content}>
                 <CustomBtn onClick={() => setOpenClout(true)}>
-                    {`-- Interested · ${activity.attendees.length} Going`}
+                    {
+                        activity.interested
+                            ? `${activity?.interested?.length} Interested · ${activity.attendees.length} Going`
+                            : `0 Interested · ${activity.attendees.length} Going`                       
+                    }
                 </CustomBtn>
             </Typography>
 

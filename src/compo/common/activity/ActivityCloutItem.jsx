@@ -10,7 +10,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 const avatar = { height: '35px', width: '35px' }
 
 export default function ActivityCloutItem({user, hostUsername}) {
-    const { name:username, photoURL:image } = user;
+    const { username, displayName, photoURL:image } = user;
     const isHost = username ? username === hostUsername : false; //
 
     return (
@@ -27,6 +27,7 @@ export default function ActivityCloutItem({user, hostUsername}) {
             <ListItemText 
                 style={{ display: 'inline' }} 
                 primary={username} 
+                secondary={displayName}
             />
             {
                 <ListItemSecondaryAction style={{ color: '#a9a9a9' }}>

@@ -46,7 +46,7 @@ export default function ActivityCancelConfirm() {
                 </ListItem>
             </List>
             <Typography style={{ color: '#fff' }}>
-                {`The attendees will be removed from the list automatically and cannot be undone.`}
+                {`It will make people unable to attend this activity until you reactivate it.`}
             </Typography>
             <ButtonGroup style={{ marginBottom: 0 }} variant="text" size="small">
                 <Button

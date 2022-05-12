@@ -96,17 +96,76 @@ export function dataFromSnapshot(snapshot) {
     }
 }
 
+export async function removeInterestedUser(activity) {
+    const user = firebase.auth().currentUser;
+    const d_ref = db.collection('activities').doc(activity.id);
+    try {
+        return d_ref.update({
+            interestedIds: firebase.firestore.FieldValue.arrayRemove(user.uid),
+            interested: (await d_ref.get()).data().interested.filter(a => a.id !== user.uid),
+        })
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function addInterestedUser(activity) {
+    const user = firebase.auth().currentUser;
+    const username = user.email.slice(0, user.email.indexOf('@'));
+    return db.collection('activities').doc(activity.id).update({
+        interested: firebase.firestore.FieldValue.arrayUnion({
+            id: user.uid,
+            username: username,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+        }),
+        interestedIds: firebase.firestore.FieldValue.arrayUnion(user.uid),
+    })
+}
+
+export async function cancelUserAttendance(activity) {
+    const user = firebase.auth().currentUser;
+    const d_ref = db.collection('activities').doc(activity.id);
+    try {
+        return d_ref.update({
+            attendeeIds: firebase.firestore.FieldValue.arrayRemove(user.uid),
+            attendees: (await d_ref.get()).data().attendees.filter(a => a.id !== user.uid),
+        })
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function addUserAttendance(activity) {
+    const user = firebase.auth().currentUser;
+    const username = user.email.slice(0, user.email.indexOf('@'));
+    return db.collection('activities').doc(activity.id).update({
+        attendees: firebase.firestore.FieldValue.arrayUnion({
+            id: user.uid,
+            username: username,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+        }),
+        attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid),
+    })
+}
+
 export function addActivityToFirestore(activity) {
+    const user = firebase.auth().currentUser;
+    const username = user.email.slice(0, user.email.indexOf('@'));
     return db.collection('activities').add({
         ...activity,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        hostedBy: 'Gojo',
-        hostPhotoURL: 'https://tva1.sinaimg.cn/large/0082tP5Hly1gl08cju854j30ir0p0di2.jpg',
+        hostUid: user.uid,
+        hostedBy: username,
+        hostPhotoURL: user.photoURL,
         attendees: firebase.firestore.FieldValue.arrayUnion({
-            id: cuid(),
-            displayName: 'Gojo',
-            photoURL: 'https://tva1.sinaimg.cn/large/0082tP5Hly1gl08cju854j30ir0p0di2.jpg'
-        })
+            id: user.uid,
+            username: username,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+        }),
+        attendeeIds: firebase.firestore.FieldValue.arrayUnion(user.uid),
     })
 }
 

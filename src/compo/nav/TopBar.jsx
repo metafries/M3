@@ -19,6 +19,7 @@ import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import { Badge, withStyles } from '@material-ui/core';
 import NotificationsNoneSharpIcon from '@material-ui/icons/NotificationsNoneSharp';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import PostAddSharpIcon from '@material-ui/icons/PostAddSharp';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Avatar } from '@material-ui/core';

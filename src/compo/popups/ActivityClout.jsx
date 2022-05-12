@@ -85,8 +85,8 @@ function ActivityClout({
                         style: {
                             borderRadius: 0,
                             color: 'whitesmoke',
-                            backdropFilter: 'blur(20px)',
-                            background: '#0000001a',
+                            // backdropFilter: 'blur(20px)',
+                            background: '#1e1e1feb',
                 
                         }
                     }}
@@ -110,7 +110,7 @@ function ActivityClout({
                                 value={value}
                                 onChange={handleChange}
                             >
-                                <Tab label={`${mockData.interested.length} Interested`} {...a11yProps(0)} />
+                                <Tab label={activity.interested ? `${activity.interested.length} Interested` : `0 Interested`} {...a11yProps(0)} />
                                 <Tab label={`${activity.attendees.length} Going`} {...a11yProps(1)} />
                             </Tabs>
                         </Toolbar>
@@ -119,7 +119,7 @@ function ActivityClout({
                         <DialogContent style={{ padding: 0 }}>
                             <TabPanel value={value} index={0}>
                                 <List>
-                                    {mockData.interested.map(user =>
+                                    {activity?.interested?.map(user =>
                                         <ActivityCloutItem key={user.id} user={user} />
                                     )}
                                 </List>

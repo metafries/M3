@@ -22,6 +22,29 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import ActivityInfo from '../common/activity/ActivityInfo';
 import { useSelector, useDispatch } from 'react-redux'
+import StarRateSharpIcon from '@material-ui/icons/StarRateSharp';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { addInterestedUser, cancelActivityToggle, cancelUserAttendance, deleteActivityInFirestore, removeInterestedUser } from '../../api/firestoreService';
+import { openModal } from '../../actions/commonActs'
+import ActivityCancelConfirm from '../modal/ActivityCancelConfirm';
+import BlockIcon from '@material-ui/icons/Block';
+import StarBorderSharpIcon from '@material-ui/icons/StarBorderSharp';
+import CheckCircleOutlineSharpIcon from '@material-ui/icons/CheckCircleOutlineSharp';
+import StarTwoToneIcon from '@material-ui/icons/StarTwoTone';
+import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import StarRateIcon from '@material-ui/icons/StarRate';
+import StarHalfSharpIcon from '@material-ui/icons/StarHalfSharp';
+import CheckCircleSharpIcon from '@material-ui/icons/CheckCircleSharp';
+import ListSharpIcon from '@material-ui/icons/ListSharp';
+import SubjectSharpIcon from '@material-ui/icons/SubjectSharp';
+import ViewListOutlinedIcon from '@material-ui/icons/ViewListOutlined';
+import FeaturedPlayListOutlinedIcon from '@material-ui/icons/FeaturedPlayListOutlined';
+import { toast } from 'react-toastify';
+import { CircularProgress } from '@material-ui/core';
+
+const active = '#eaff00';
+const inactive = '#afadaa';
 
 const actions = '#afadaa';
 const content = 'textSecondary';
@@ -75,9 +98,41 @@ function ActivityListItem({ activity }) {
         setExpanded(!expanded);
     };
 
+    const { currentUser } = useSelector(state => state.auth);
+    const isHost = activity?.hostUid === currentUser?.uid;
+    const isGoing = activity?.attendees.some(a => a.id === currentUser?.uid);
+    const isInterested = activity?.interested?.some(i => i.id === currentUser?.uid);
+
+    const [updating, setUpdating] = React.useState(false);
+
+    const handleInterestedUser = async (activity) => {
+        setUpdating(true);
+        try {
+            isInterested 
+                ? await removeInterestedUser(activity) 
+                : await addInterestedUser(activity);
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setUpdating(false);
+        }
+    }
+
+    const handleCancelActivity = async (activity) => {
+        setUpdating(true);
+        try {
+            await cancelActivityToggle(activity)
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setUpdating(false);
+        }
+    }
+
     return (
         <Card className={classes.root}>
             <ActivityHeader
+                isHost={isHost}
                 key={activity.id}
                 menuStyle={menuStyle}
                 activity={activity}
@@ -100,7 +155,56 @@ function ActivityListItem({ activity }) {
                     </div>
                 </div>
             </Link>
-            <CardActions  disableSpacing>
+            <CardActions disableSpacing>
+                {
+                    isHost && 
+                    <IconButton
+                        style={{ color: active }}
+                        onClick={() => {
+                            dispatch(handleSelected(activity));
+                            activity.isCancelled
+                                ? cancelActivityToggle(activity)
+                                : dispatch(openModal(<ActivityCancelConfirm />))
+
+                        }}
+                    >
+                        { 
+                            activity.isCancelled 
+                                ? <BlockIcon style={{color: '#afadaa'}} /> 
+                                : <CheckCircleSharpIcon style={{ fontSize: 24 }} /> 
+                        }                        
+                    </IconButton>
+                }
+                {
+                    !isHost && !activity.isCancelled && isGoing &&
+                    <IconButton
+                        style={{ color: active }}
+                        onClick={() => {
+                            dispatch(handleSelected(activity));        
+                            cancelUserAttendance(activity);
+                        }}
+                    >
+                        <CheckCircleSharpIcon style={{ fontSize: 24 }} />
+                    </IconButton>
+                }
+                {
+                    !isHost && activity.isCancelled && isGoing &&
+                    <IconButton
+                        disabled={true}
+                        style={{ color: '#eaff004f' }}
+                    >
+                        <CheckCircleSharpIcon style={{ fontSize: 24 }} />
+                    </IconButton>
+                }                
+                {
+                    !isHost && !isGoing &&
+                    <IconButton
+                        onClick={() => handleInterestedUser(activity)}
+                        style={ isInterested ? { color: active } : { color: inactive } }
+                    >
+                        { updating ? <CircularProgress size={24} /> : <SubjectSharpIcon style={{ fontSize: 26 }} /> }                                                
+                    </IconButton>
+                }
                 <ActivityActions
                     activity={activity}
                 />
@@ -119,7 +223,6 @@ function ActivityListItem({ activity }) {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <ActivityDesc description={activity.description} />
                 <ActivityTags category={activity.category} />
-
             </Collapse>
         </Card>
     );

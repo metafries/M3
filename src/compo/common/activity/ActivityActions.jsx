@@ -21,10 +21,11 @@ import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutline
 import ActivityCancelConfirm from '../../modal/ActivityCancelConfirm';
 import { openModal } from '../../../actions/commonActs'
 
-const active = '#987000';
+const active = '#fff';
 const inactive = '#afadaa';
 
 function ActivityActions({
+    isHost,
     activity,
 }) {
     const { selectedActivity } = useSelector(state => state.activity)
@@ -39,13 +40,7 @@ function ActivityActions({
         <React.Fragment>
             <ActivityChat activity={activity} openChat={openChat} setOpenChat={setOpenChat} />
 
-            <IconButton
-                disabled={activity.isCancelled}
-                style={{ color: inactive }}
-                aria-label="interested"
-            >
-                <StarOutlineIcon />
-            </IconButton>
+
             <IconButton
                 onClick={(e) => setOpenChat(true)}
                 style={{ color: inactive }}

@@ -16,6 +16,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import BookmarkBorderSharpIcon from '@material-ui/icons/BookmarkBorderSharp';
 
 function ActivityMenu({
+    isHost,
     open,
     anchorEl,
     handleClose,
@@ -56,7 +57,7 @@ function ActivityMenu({
                 onClose={() => handleClose()}
             >
                 {
-                    selectedActivity &&
+                    selectedActivity && !isHost &&
                     <MenuItem>
                         <ListItemIcon style={listItemIcon}>
                             <BookmarkBorderSharpIcon />
@@ -65,7 +66,7 @@ function ActivityMenu({
                     </MenuItem>
                 }                
                 {
-                    selectedActivity &&
+                    selectedActivity && !isHost &&
                     <MenuItem>
                         <ListItemIcon style={listItemIcon}>
                             <FlagOutlinedIcon />
@@ -74,7 +75,7 @@ function ActivityMenu({
                     </MenuItem>
                 }
                 {
-                    selectedActivity &&
+                    selectedActivity && isHost &&
                     <MenuItem
                         component={Link}
                         to={selectedActivity && `/edit/${selectedActivity.id}`}
@@ -87,7 +88,7 @@ function ActivityMenu({
                     </MenuItem>
                 }
                 {
-                    selectedActivity &&
+                    selectedActivity && isHost &&
                     <MenuItem onClick={() => dispatch(openModal(<ActivityDeleteConfirm />))}>
                         <ListItemIcon style={listItemIcon}>
                             <DeleteOutlineIcon />
