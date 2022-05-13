@@ -9,6 +9,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useSelector, useDispatch } from 'react-redux'
 import { handleSelected, handleMenuClick } from '../../../actions/activityActs'
 import ActivityMenu from '../../nav/ActivityMenu';
+import { Link } from 'react-router-dom';
 
 const actions = '#afadaa';
 
@@ -48,6 +49,8 @@ export default function ActivityHeader({
                 avatar={
                     <AvatarGroup max={2}>
                         <Avatar 
+                            component={Link}
+                            to={`/profile/${activity.hostUid}`}
                             alt={activity.hostedBy}                         
                             src={activity.hostPhotoURL || '/'}
                             className={classes.avatar} 

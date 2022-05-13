@@ -9,26 +9,32 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 const avatar = { height: '35px', width: '35px' }
 
-export default function ActivityCloutItem({user, hostUsername}) {
-    const { username, displayName, photoURL:image } = user;
+function ListItemLink(props) {
+    return <ListItem button component="a" {...props} />;
+}
+
+export default function ActivityCloutItem({ user, hostUsername }) {
+    const { username, displayName, photoURL: image } = user;
     const isHost = username ? username === hostUsername : false; //
 
     return (
         <ListItem button>
-            <ListItemAvatar>
-                {                    
-                    isHost
-                        ?   <Badge color="secondary" badgeContent='Host' showZero>
+            <ListItemLink href={`/profile/${user.id}`}>
+                <ListItemAvatar>
+                    {
+                        isHost
+                            ? <Badge color="secondary" badgeContent='Host' showZero>
                                 <Avatar style={avatar} alt={username} src={image || '/'} />
                             </Badge>
-                        :   <Avatar style={avatar} alt={username} src={image || '/'} />
-                }
-            </ListItemAvatar>
-            <ListItemText 
-                style={{ display: 'inline' }} 
-                primary={username} 
-                secondary={displayName}
-            />
+                            : <Avatar style={avatar} alt={username} src={image || '/'} />
+                    }
+                </ListItemAvatar>
+                <ListItemText
+                    style={{ display: 'inline' }}
+                    primary={username}
+                    secondary={displayName}
+                />
+            </ListItemLink>
             {
                 <ListItemSecondaryAction style={{ color: '#a9a9a9' }}>
                     <PersonAddIcon />
