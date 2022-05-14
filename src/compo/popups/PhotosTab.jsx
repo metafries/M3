@@ -1,34 +1,26 @@
 import React from 'react'
-import { AppBar, Button, CardContent, Dialog } from '@material-ui/core'
+import { AppBar, Button, Dialog } from '@material-ui/core'
 import { withStyles, makeStyles, createStyles } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import Typography from '@material-ui/core/Typography';
-import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined';
 import Container from '@material-ui/core/Container';
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import useFirestoreCollection from '../../hooks/useFirestoreCollection'
-import { getUserPhotos, setMainPhoto } from '../../api/firestoreService';
-import { handleSelectedPhoto, listenToUserPhotos } from '../../actions/profileActs'
-import { useDispatch, useSelector } from 'react-redux';
-import LoadingIndicator from '../common/utils/LoadingIndicator'
+import { handleSelectedPhoto } from '../../actions/profileActs'
+import { useDispatch } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import PhotosMenu from '../nav/PhotosMenu';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
 
 const actions = '#afadaa';
-
-const active = '#987000';
 const inactive = '#a9a9a9';
 
 const CustomBtn = withStyles({
@@ -100,7 +92,6 @@ export default function PhotosTab({
 
 
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);

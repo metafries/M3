@@ -1,23 +1,17 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Card, CardHeader, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
+import { Avatar, Card, CardHeader, makeStyles } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SettingsMenu from '../nav/SettingsMenu';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import UserClout from '../common/user/UserClout'
-import Button from '@material-ui/core/Button';
 import ProfileContent from '../tabs/ProfileContent';
 import useFirestoreDoc from '../../hooks/useFirestoreDoc';
 import { getUserProfile } from '../../api/firestoreService';
-import { listenToCurrentUserProfile, listenToSelectedUserProfile } from '../../actions/profileActs';
+import { listenToSelectedUserProfile } from '../../actions/profileActs';
 import LoadingIndicator from '../common/utils/LoadingIndicator'
-import useFirestoreCollection from '../../hooks/useFirestoreCollection'
-import { getUserPhotos } from '../../api/firestoreService';
-import { listenToUserPhotos } from '../../actions/profileActs'
 
-const content = 'textSecondary';
 const actions = '#afadaa';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +34,6 @@ export default function UserProfile({match}) {
     const classes = useStyles();
 
     const dispatch = useDispatch();
-    const { loading } = useSelector(state => state.async);
 
     const { currentUserProfile, selectedUserProfile } = useSelector(state => state.profile);
     console.log('CURRENTUSER_PROFILE', currentUserProfile)

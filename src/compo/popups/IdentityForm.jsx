@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import { Link, useParams, useHistory } from 'react-router-dom';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
@@ -17,18 +15,15 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import DialogContent from '@material-ui/core/DialogContent';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import { CircularProgress, LinearProgress, withStyles } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
 import FormikTextInput from '../common/utils/FormikTextInput';
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { thirdParty, signInUser, signOutUser } from '../../actions/authActs'
-import { useSelector, useDispatch } from 'react-redux'
 import { registerInFirebase, signInWithEmail, thirdPartyLogin } from '../../api/firebaseService';
-import Validation from '../common/utils/Validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebookSquare, faGoogle } from "@fortawesome/free-brands-svg-icons"
+import { faGoogle } from "@fortawesome/free-brands-svg-icons"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,7 +81,6 @@ function a11yProps(index) {
 }
 
 export default function IdentityForm({ open, handleClose, setAuthenticated }) {
-  const dispatch = useDispatch();
 
   function handleThirdPartyLogin(provider)  {
     handleClose(true);
@@ -94,20 +88,12 @@ export default function IdentityForm({ open, handleClose, setAuthenticated }) {
   }
 
   const classes = useStyles();
-  const [closeRoute, setCloseRoute] = useState('/activities');
 
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     
     setValue(newValue);
   };
-
-  const progressClasses = makeStyles((theme) => ({
-    root: {
-      marginBottom: theme.spacing(2),
-      marginTop: theme.spacing(2),
-    },
-  }));
 
   let loginSchema = yup.object().shape({
     email: yup.string().required().email(),

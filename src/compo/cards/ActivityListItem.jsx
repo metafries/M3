@@ -8,46 +8,25 @@ import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ActivityTags from '../../compo/common/activity/ActivityTags';
 import ActivityHeader from '../../compo/common/activity/ActivityHeader';
-import Typography from '@material-ui/core/Typography';
 import ActivityActions from '../../compo/common/activity/ActivityActions';
 import ActivityDesc from '../../compo/common/activity/ActivityDesc';
 import CardMedia from '@material-ui/core/CardMedia';
-import ActivityStatus from '../../compo/common/activity/ActivityStatus';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns'
-import { handleSelected, handleMenuClick } from '../../actions/activityActs'
-import ActivityMenu from '../nav/ActivityMenu';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import { handleSelected } from '../../actions/activityActs'
 import ActivityInfo from '../common/activity/ActivityInfo';
 import { useSelector, useDispatch } from 'react-redux'
-import StarRateSharpIcon from '@material-ui/icons/StarRateSharp';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import { addInterestedUser, cancelActivityToggle, cancelUserAttendance, deleteActivityInFirestore, removeInterestedUser } from '../../api/firestoreService';
+import { addInterestedUser, cancelActivityToggle, cancelUserAttendance, removeInterestedUser } from '../../api/firestoreService';
 import { openModal } from '../../actions/commonActs'
 import ActivityCancelConfirm from '../modal/ActivityCancelConfirm';
 import BlockIcon from '@material-ui/icons/Block';
-import StarBorderSharpIcon from '@material-ui/icons/StarBorderSharp';
-import CheckCircleOutlineSharpIcon from '@material-ui/icons/CheckCircleOutlineSharp';
-import StarTwoToneIcon from '@material-ui/icons/StarTwoTone';
-import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import StarRateIcon from '@material-ui/icons/StarRate';
-import StarHalfSharpIcon from '@material-ui/icons/StarHalfSharp';
 import CheckCircleSharpIcon from '@material-ui/icons/CheckCircleSharp';
-import ListSharpIcon from '@material-ui/icons/ListSharp';
 import SubjectSharpIcon from '@material-ui/icons/SubjectSharp';
-import ViewListOutlinedIcon from '@material-ui/icons/ViewListOutlined';
-import FeaturedPlayListOutlinedIcon from '@material-ui/icons/FeaturedPlayListOutlined';
 import { toast } from 'react-toastify';
 import { CircularProgress } from '@material-ui/core';
 
 const active = '#eaff00';
 const inactive = '#afadaa';
 
-const actions = '#afadaa';
-const content = 'textSecondary';
 const menuStyle = {
     color: 'whitesmoke',
     background: 'rgba(10,10,10,0.2)',
@@ -111,17 +90,6 @@ function ActivityListItem({ activity }) {
             isInterested 
                 ? await removeInterestedUser(activity) 
                 : await addInterestedUser(activity);
-        } catch (error) {
-            toast.error(error.message);
-        } finally {
-            setUpdating(false);
-        }
-    }
-
-    const handleCancelActivity = async (activity) => {
-        setUpdating(true);
-        try {
-            await cancelActivityToggle(activity)
         } catch (error) {
             toast.error(error.message);
         } finally {

@@ -1,4 +1,4 @@
-import { THIRD_PARTY, SIGN_IN_USER, SIGN_OUT_USER } from "../constants/authConst";
+import { SIGN_IN_USER, SIGN_OUT_USER } from "../constants/authConst";
 import firebase from '../config/firebase'
 import { APP_LOADED } from "../reducers/asyncRdc";
 import { dataFromSnapshot, getUserProfile } from "../api/firestoreService";

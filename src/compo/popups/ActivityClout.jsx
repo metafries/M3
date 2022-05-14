@@ -15,7 +15,6 @@ import Slide from '@material-ui/core/Slide';
 import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import mockData from '../../api/mockData'
 
 const useStyles = makeStyles((theme) => ({
     appBar: {

@@ -4,7 +4,6 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import { useSelector, useDispatch } from 'react-redux'
 import { closeModal } from '../../actions/commonActs'
-import { handleMenuClose } from '../../actions/activityActs'
 import { deleteFromFirestoreStorage } from '../../api/firebaseService';
 import { deletePhotoFromCollection } from '../../api/firestoreService';
 

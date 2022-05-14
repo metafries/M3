@@ -6,8 +6,8 @@ import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { useSelector, useDispatch } from 'react-redux'
-import { handleSelected, handleMenuClick } from '../../../actions/activityActs'
+import { useDispatch } from 'react-redux'
+import { handleSelected } from '../../../actions/activityActs'
 import ActivityMenu from '../../nav/ActivityMenu';
 import { Link } from 'react-router-dom';
 

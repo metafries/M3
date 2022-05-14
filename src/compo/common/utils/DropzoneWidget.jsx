@@ -1,8 +1,6 @@
-import React, { useCallback } from 'react'
-import { useDropzone } from 'react-dropzone'
+import React from 'react'
 import Dropzone from 'react-dropzone'
 import { Typography } from '@material-ui/core';
-import PublishSharpIcon from '@material-ui/icons/PublishSharp';
 
 const baseStyle = {
     padding: '20px',
@@ -13,11 +11,6 @@ const baseStyle = {
     backgroundColor: '#f5f5f5',
 };
 
-const activeStyle = {
-    borderStyle: 'solid',
-    borderColor: '#28A645',
-    backgroundColor: '#f5f5f5',
-};
 const rejectStyle = {
     padding: '20px',
     borderStyle: 'solid',
@@ -26,15 +19,6 @@ const rejectStyle = {
 };
 
 export default function DropzoneWidget({ files, setFiles }) {
-
-    const onDrop = useCallback(acceptedFiles => {
-        // Do something with the files
-        console.log(acceptedFiles);
-        setFiles(acceptedFiles.map(file => Object.assign(file, {
-            preview: URL.createObjectURL(file)
-        })))
-    }, [setFiles])
-
     return (
         <Dropzone
             accept="image/*"

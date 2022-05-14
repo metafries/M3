@@ -10,9 +10,7 @@ import Container from '@material-ui/core/Container'
 import ActivityForm from './compo/popups/ActivityForm'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import ActivityItem from './compo/cards/ActivityItem'
-import ActivityChat from './compo/popups/ActivityChat'
 import ModalContainer from './compo/modal/ModalContainer'
-import ActivityMenu from './compo/nav/ActivityMenu'
 import UserProfile from './compo/pages/UserProfile';
 import { useSelector } from 'react-redux';
 import LoadingIndicator from './compo/common/utils/LoadingIndicator';

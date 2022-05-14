@@ -12,7 +12,7 @@ import * as yup from 'yup';
 import FormikTextInput from '../common/utils/FormikTextInput';
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { CircularProgress, LinearProgress, withStyles } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { updateUserPassword } from '../../api/firebaseService';

@@ -5,8 +5,6 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
-import { grey, green, purple } from '@material-ui/core/colors';
 import DropzoneWidget from '../common/utils/DropzoneWidget';
 import Container from '@material-ui/core/Container';
 import CropperWidget from '../common/utils/CropperWidget';
@@ -89,7 +87,7 @@ export default function PhotoHLStepper({handleUploadCompleted}) {
                         imagePreview={files.length > 0 ? files[0].preview : ''} 
                     />;
         case 2:
-            return  <img src={preview} style={{width: '100%'}} />
+            return  <img alt='' src={preview} style={{width: '100%'}} />
         default:
             return  'Unknown step';
       }    

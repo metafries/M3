@@ -2,7 +2,7 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
-import { grey, green, purple } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoUploader from '../../popups/PhotoUploader';

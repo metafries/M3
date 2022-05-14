@@ -11,7 +11,7 @@ import { Formik, Form } from 'formik';
 import FormikTextInput from '../common/utils/FormikTextInput';
 import FormikTextArea from '../common/utils/FormikTextArea'
 import * as yup from 'yup';
-import { CircularProgress, LinearProgress, withStyles } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import {updateUserProfile} from '../../api/firestoreService'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';

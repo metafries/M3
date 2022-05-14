@@ -4,7 +4,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux'
-import { deleteActivity, handleMenuClose } from '../../actions/activityActs'
+import { handleMenuClose } from '../../actions/activityActs'
 import { closeModal } from '../../actions/commonActs'
 import { deleteActivityInFirestore } from '../../api/firestoreService';
 import { asyncActionFinish, asyncActionStart } from '../../reducers/asyncRdc';

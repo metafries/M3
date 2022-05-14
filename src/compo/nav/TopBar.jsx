@@ -19,16 +19,13 @@ import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import { Badge, withStyles } from '@material-ui/core';
 import NotificationsNoneSharpIcon from '@material-ui/icons/NotificationsNoneSharp';
 import PostAddIcon from '@material-ui/icons/PostAdd';
-import PostAddSharpIcon from '@material-ui/icons/PostAddSharp';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Avatar } from '@material-ui/core';
-import ActivityForm from "../popups/ActivityForm";
 import { Link, useHistory } from 'react-router-dom';
 import IdentityForm from '../popups/IdentityForm';
 import { useSelector, useDispatch } from 'react-redux'
-import { toggleActivityForm, handleSelected } from '../../actions/activityActs'
-import { signOutUser } from '../../actions/authActs'
+import { handleSelected } from '../../actions/activityActs'
 import { toggleDrawer } from '../../actions/commonActs';
 import ActivitySearch from '../popups/ActivitySearch'
 import { signOutFirebase } from '../../api/firebaseService';
@@ -129,7 +126,7 @@ function TopBar() {
     const classes = useStyles();
     const theme = useTheme();
     const { openDrawer } = useSelector(state => state.common);
-    const { currentUser, authenticated } = useSelector(state => state.auth);
+    const { authenticated } = useSelector(state => state.auth);
     const { currentUserProfile } = useSelector(state => state.profile);
     const dispatch = useDispatch();
     const history = useHistory();

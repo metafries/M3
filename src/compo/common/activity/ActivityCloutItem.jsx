@@ -10,7 +10,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 const avatar = { height: '35px', width: '35px' }
 
 function ListItemLink(props) {
-    return <ListItem button component="a" {...props} />;
+    return <ListItem style={{padding: 0}} button component="a" {...props} />;
 }
 
 export default function ActivityCloutItem({ user, hostUsername }) {

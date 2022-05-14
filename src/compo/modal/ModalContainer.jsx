@@ -1,6 +1,6 @@
 import { makeStyles, Modal } from '@material-ui/core';
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 function getModalStyle() {
     const top = 50

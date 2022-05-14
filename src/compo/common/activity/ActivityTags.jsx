@@ -1,6 +1,5 @@
 import React from 'react';
 import CardContent from '@material-ui/core/CardContent';
-import Chip from '@material-ui/core/Chip';
 import { Button } from '@material-ui/core';
 
 export default function ActivityTags({ category }) {

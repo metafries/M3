@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import { useParams } from 'react-router-dom';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import ActivityTags from '../../compo/common/activity/ActivityTags';
 import ActivityHeader from '../../compo/common/activity/ActivityHeader';
 import ActivityMedia from '../../compo/common/activity/ActivityMedia';
@@ -16,31 +14,13 @@ import { addInterestedUser, cancelUserAttendance, listenToActivityFromFirestore,
 import { listenToActivities } from '../../actions/activityActs';
 import LoadingIndicator from '../common/utils/LoadingIndicator'
 import Errors from '../common/utils/Errors';
-import ActivityMenu from '../nav/ActivityMenu';
 import IconButton from '@material-ui/core/IconButton';
-import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined';
-import PosterUploader from '../popups/PosterUploader';
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
-import { useHistory } from 'react-router';
-import BookmarkBorderSharpIcon from '@material-ui/icons/BookmarkBorderSharp';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import { handleSelected } from '../../actions/activityActs';
-import { cancelActivityToggle, deleteActivityInFirestore } from '../../api/firestoreService';
+import { cancelActivityToggle } from '../../api/firestoreService';
 import { openModal } from '../../actions/commonActs'
 import ActivityCancelConfirm from '../modal/ActivityCancelConfirm';
 import BlockIcon from '@material-ui/icons/Block';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import StarRateSharpIcon from '@material-ui/icons/StarRateSharp';
-import StarBorderSharpIcon from '@material-ui/icons/StarBorderSharp';
-import CheckCircleOutlineSharpIcon from '@material-ui/icons/CheckCircleOutlineSharp';
-import StarTwoToneIcon from '@material-ui/icons/StarTwoTone';
-import CheckCircleTwoToneIcon from '@material-ui/icons/CheckCircleTwoTone';
-import StarRateIcon from '@material-ui/icons/StarRate';
-import StarHalfSharpIcon from '@material-ui/icons/StarHalfSharp';
 import CheckCircleSharpIcon from '@material-ui/icons/CheckCircleSharp';
-import FormatListBulletedSharpIcon from '@material-ui/icons/FormatListBulletedSharp';
 import SubjectSharpIcon from '@material-ui/icons/SubjectSharp';
 import { toast } from 'react-toastify';
 import { addUserAttendance } from '../../api/firestoreService'

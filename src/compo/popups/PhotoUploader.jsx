@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, Button, Dialog } from '@material-ui/core'
+import { AppBar, Dialog } from '@material-ui/core'
 import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';

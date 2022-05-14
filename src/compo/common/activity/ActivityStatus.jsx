@@ -1,6 +1,5 @@
 import React from 'react'
-import { List, ListItem, ListItemText,ListItemIcon } from '@material-ui/core';
-import BlockIcon from '@material-ui/icons/Block';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 
 export default function ActivityStatus({ activity }) {
     return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,12 +15,10 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Link, useParams } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { LinearProgress } from '@material-ui/core';
 import mockData from '../../api/mockData';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +50,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function ActivityChat({ activity, openChat, setOpenChat }) {
-  const { id } = useParams();
   const classes = useStyles();
 
   return (

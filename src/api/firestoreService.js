@@ -1,6 +1,4 @@
-import cuid from 'cuid';
 import firebase from '../config/firebase'
-import { uploadPosterToStorage } from './firebaseService';
 
 const db = firebase.firestore();
 

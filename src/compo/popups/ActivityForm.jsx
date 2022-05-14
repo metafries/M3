@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import { Input, List, ListItem, ListItemIcon, ListItemText, TextField } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
+import { TextField } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
-import { createActivity, updateActivity, handleMenuClose, listenToActivities } from '../../actions/activityActs'
+import { handleMenuClose, listenToActivities } from '../../actions/activityActs'
 import Container from '@material-ui/core/Container';
 import { Formik, Form } from 'formik';
 import FormikTextInput from '../common/utils/FormikTextInput'
@@ -24,16 +23,13 @@ import { categoryOpts } from '../../constants/categoryOpts';
 import cuid from 'cuid';
 import * as yup from 'yup';
 import FormikPlaceInput from '../common/utils/FormikPlaceInput';
-import { toggleDrawer } from '../../actions/commonActs';
 import useFirestoreDoc from '../../hooks/useFirestoreDoc';
 import { addActivityToFirestore, listenToActivityFromFirestore, setActivityPoster, updateActivityInFirestore } from '../../api/firestoreService';
 import Errors from '../common/utils/Errors';
 import LoadingIndicator from '../common/utils/LoadingIndicator';
-import { CircularProgress, FormHelperText } from '@material-ui/core';
-import PosterHLStepper from '../steps/PosterHLStepper';
+import { CircularProgress } from '@material-ui/core';
 import DropzoneWidget from '../common/utils/DropzoneWidget';
 import CropperWidget from '../common/utils/CropperWidget';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { toast } from 'react-toastify';
 import { getFileExtension } from '../../util';
 import { uploadPosterToStorage } from '../../api/firebaseService';
@@ -64,7 +60,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function ActivityForm({ match }) {
 
   const { error, loading } = useSelector(state => state.async);
-  const { openDrawer } = useSelector(state => state.common);
   const selectedActivity = useSelector(state => state.activity.activities.find(a => a.id === match.params.id));
 
   const [files, setFiles] = React.useState([]);
@@ -103,7 +98,21 @@ export default function ActivityForm({ match }) {
 
   const [closeRoute, setCloseRoute] = useState('/');
   useEffect(() => {
-    selectedActivity ? setActivity(selectedActivity) : setActivity(initialValues);
+    selectedActivity ? setActivity(selectedActivity) : setActivity({
+      id: '',
+      title: '',
+      category: '',
+      description: '',
+      date: new Date(),
+      city: {
+        address: '',
+        latLng: null
+      },
+      venue: {
+        address: '',
+        latLng: null
+      },
+    });
     selectedActivity ? setCloseRoute(`/activities/${id}`) : setCloseRoute('/activities');
   }, [id, selectedActivity])
 
@@ -166,7 +175,7 @@ export default function ActivityForm({ match }) {
 
   const classes = useStyles();
 
-  if (match.path != '/create' && error) return <Errors error={error} />
+  if (match.path !== '/create' && error) return <Errors error={error} />
   if (loading) return <LoadingIndicator />
 
 
@@ -237,7 +246,7 @@ export default function ActivityForm({ match }) {
               />
               <TextField disabled name='poster' label="Poster" value={files.length > 0 ? files[0].name : ' '} />
             </Form>
-            <img src={preview} style={{ width: '100%' }} />
+            <img alt='' src={preview} style={{ width: '100%' }} />
             {
               files.length > 0 &&
               <CropperWidget

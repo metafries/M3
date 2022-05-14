@@ -2,11 +2,9 @@ import React from 'react'
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Container from '@material-ui/core/Container';
-import { DialogContent } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
@@ -19,14 +17,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import { grey, green, purple } from '@material-ui/core/colors';
-import AddAPhotoOutlinedIcon from '@material-ui/icons/AddAPhotoOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserPhotos, getUserProfile } from '../../api/firestoreService';
+import { getUserPhotos } from '../../api/firestoreService';
 import { listenToUserPhotos } from '../../actions/profileActs'
-import UserProfile from '../pages/UserProfile';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection'
-import { CircularProgress } from '@material-ui/core';
 
 const ColorButton = withStyles((theme) => ({
     root: {

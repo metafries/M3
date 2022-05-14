@@ -2,7 +2,6 @@ import React from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import FlagOutlinedIcon from '@material-ui/icons/FlagOutlined';
@@ -11,8 +10,6 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { useSelector, useDispatch } from 'react-redux'
 import { openModal } from '../../actions/commonActs'
 import ActivityDeleteConfirm from '../modal/ActivityDeleteConfirm';
-import { toggleActivityForm, handleMenuClose } from '../../actions/activityActs'
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import BookmarkBorderSharpIcon from '@material-ui/icons/BookmarkBorderSharp';
 
 function ActivityMenu({
