@@ -201,6 +201,12 @@ export function listenToActivityFromFirestore(activityId) {
     return db.collection('activities').doc(activityId);
 }
 
-export function listenToActivitiesFromFirestore() {
-    return db.collection('activities');
+export function listenToActivitiesFromFirestore(filter) {
+    console.log('SEARCHENGINE', filter);
+    switch (filter.type) {
+        case 0:
+            return db.collection('activities');
+        default:
+            return db.collection('activities');
+    }    
 }

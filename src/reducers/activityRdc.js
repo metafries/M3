@@ -7,10 +7,15 @@ import {
     HANDLE_MENU_CLICK, 
     HANDLE_SELECTED, 
     HANDLE_MENU_CLOSE, 
-    FETCH_ACTIVITIES
+    FETCH_ACTIVITIES,
+    SEARCH_ACTIVITY
 } from "../constants/activityConst";
 
 const initialState = {
+    filter: {
+        type: 0,
+        range: 'all',
+    },
     activities: [],
     anchorEl: null,
     selectedActivity: null,
@@ -28,6 +33,11 @@ export default function activityRdc(state = initialState, {type, payload}) {
             return {
                 ...state,
                 activityForm: !state.activityForm
+            }
+        case SEARCH_ACTIVITY:
+            return {
+                ...state,
+                filter: payload,
             }
         case HANDLE_SELECTED:
             return {

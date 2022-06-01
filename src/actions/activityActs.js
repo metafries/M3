@@ -6,7 +6,8 @@ import {
     CREATE_ACTIVITY, 
     DELETE_ACTIVITY, 
     UPDATE_ACTIVITY, 
-    FETCH_ACTIVITIES
+    FETCH_ACTIVITIES,
+    SEARCH_ACTIVITY
 } from "../constants/activityConst";
 import { asyncActionStart, asyncActionError, asyncActionFinish } from '../reducers/asyncRdc'
 import { fetchSampleData } from '../api/mockApi'
@@ -35,6 +36,13 @@ export function toggleActivityForm() {
     return {
         type: TOGGLE_ACTIVITY_FORM,
         payload: null
+    }
+}
+
+export function handleSearchActivities(filter) {
+    return {
+        type: SEARCH_ACTIVITY,
+        payload: filter,
     }
 }
 
