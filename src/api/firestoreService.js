@@ -201,6 +201,20 @@ export function listenToActivityFromFirestore(activityId) {
     return db.collection('activities').doc(activityId);
 }
 
+export function getUserActivities(uuid, filter) {
+    const ref = db.collection('activities');
+    switch (filter.range) {
+        case 'hosting':
+            return ref.where('hostUid', '==', uuid);
+        case 'going':
+            return ref.where('attendeeIds', 'array-contains', uuid);
+        case 'interested':
+            return ref.where('interestedIds', 'array-contains', uuid);
+        default:
+            return ref;
+    }    
+}
+
 export function listenToActivitiesFromFirestore(filter) {
     console.log('SEARCHENGINE', filter);
     switch (filter.type) {

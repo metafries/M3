@@ -17,7 +17,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserPhotos } from '../../api/firestoreService';
+import { getUserActivities, getUserPhotos, listenToActivitiesFromFirestore } from '../../api/firestoreService';
 import { listenToUserPhotos } from '../../actions/profileActs'
 import useFirestoreCollection from '../../hooks/useFirestoreCollection'
 import { DatePicker } from "@material-ui/pickers";
@@ -32,6 +32,8 @@ import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import { handleSelectedPhoto } from '../../actions/profileActs'
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PhotosMenu from '../nav/PhotosMenu';
+import { handleSearchActivities, listenToActivities } from '../../actions/activityActs';
+import ActivityListItem from '../cards/ActivityListItem';
 
 const actions = '#afadaa';
 const inactive = '#a9a9a9';
@@ -131,6 +133,7 @@ function a11yProps(index) {
 export default function ProfileContent({
     profile
 }) {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const cardClasses = useCardStyles();
 
@@ -139,11 +142,16 @@ export default function ProfileContent({
         setSelectedDate(d);
     };
 
-
-    const [schedule, setSchedule] = React.useState(2);
+    const { activities } = useSelector(state => state.activity)
+    const [schedule, setSchedule] = React.useState('going');
     const handleScheduleSearch = e => {
         setSchedule(e.target.value);
     }
+    useFirestoreCollection({
+        query: () => getUserActivities(profile.id, { range: schedule }),
+        data: activities => dispatch(listenToActivities(activities)),
+        deps: [profile.id, schedule, dispatch]
+    })
 
     const [openPhotosTab, setOpenPhotosTab] = React.useState(false);
     const [photos, setPhotos] = React.useState(0);
@@ -155,7 +163,6 @@ export default function ProfileContent({
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const dispatch = useDispatch();
 
     useFirestoreCollection({
         query: () => getUserPhotos(profile.id),
@@ -198,11 +205,18 @@ export default function ProfileContent({
 
 
             <TabPanel value={value} index={0}>
-                <div style={{  position: 'fixed', left: 0, width: '100%', bottom: 0 }}>
+                <div style={{ marginBottom: '100px' }}>
+                    {
+                        activities.map(a => (
+                            <ActivityListItem key={a.id} activity={a} />
+                        ))
+                    }
+                </div>
+                <div style={{ zIndex: 1, position: 'fixed', left: 0, width: '100%', bottom: 0 }}>
                     <Container style={{ backgroundColor: '#eaff00', opacity: 0.9 }} maxWidth='sm'>
                         <FormControl className={classes.formControl}>
                             <Typography style={{ color: '#6d6d6d' }}>
-                                {`10 activities · @${profile.username}`}
+                                {`${activities.length} activities · @${profile.username}`}
                             </Typography>
                             <Select
                                 labelId="schedule-select-label"
@@ -210,9 +224,9 @@ export default function ProfileContent({
                                 value={schedule}
                                 onChange={handleScheduleSearch}
                             >
-                                <MenuItem value={0}>Hosting</MenuItem>
-                                <MenuItem value={1}>Going</MenuItem>
-                                <MenuItem value={2}>Interested</MenuItem>
+                                <MenuItem value={'hosting'}>Hosting</MenuItem>
+                                <MenuItem value={'going'}>Going</MenuItem>
+                                <MenuItem value={'interested'}>Interested</MenuItem>
                             </Select>
                         </FormControl>
                     </Container>

@@ -122,6 +122,7 @@ function ActivitySearch({ openActivitySearch, closeActivitySearch }) {
         {
           categoryOpts.map(opt => (
             <FormControlLabel
+              key={opt.val}
               control={
                 <Checkbox
                   checked={state[opt.val]}
