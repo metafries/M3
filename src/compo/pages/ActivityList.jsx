@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ActivityListItem from '../cards/ActivityListItem'
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingIndicator from '../common/utils/LoadingIndicator'
@@ -69,6 +69,11 @@ export default function ActivityList() {
         data: activities => dispatch(listenToActivities(activities)),
         deps: [dispatch]
     })
+
+    const { scrollPosition } = useSelector(state => state.common);
+    useEffect(() => {
+        window.scrollTo(0, scrollPosition);
+    }, [scrollPosition])
 
     if (loading) return <LoadingIndicator />
 

@@ -1,8 +1,11 @@
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import ActivityChat from '../../popups/ActivityChat'
+import ChatComment from '../../popups/ChatComment'
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
+import { useDispatch } from 'react-redux';
+import { handleScrollPosition } from '../../../actions/commonActs';
+import { Link } from 'react-router-dom';
 
 const iconbtn = '#afadaa'
 
@@ -10,17 +13,15 @@ function ActivityActions({
     isHost,
     activity,
 }) {
-    const [openChat, setOpenChat] = React.useState(false);
-
+    const dispatch = useDispatch();
     return (
         <React.Fragment>
-            <ActivityChat activity={activity} openChat={openChat} setOpenChat={setOpenChat} />
-
-
             <IconButton
-                onClick={(e) => setOpenChat(true)}
+                component={Link}
+                to={`/c/${activity.id}`}
                 style={{ color: iconbtn }}
                 aria-label="chat"
+                onClick={() => dispatch(handleScrollPosition(window.pageYOffset))}
             >
                 <ChatOutlinedIcon />
             </IconButton>

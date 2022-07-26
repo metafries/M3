@@ -1,6 +1,27 @@
 import firebase from '../config/firebase'
 import { setUserProfileData } from './firestoreService';
 
+export function firebaseObjToArr(snapshot) {
+    if (snapshot) {
+        return Object.entries(snapshot).map(e => Object.assign({}, e[1], {id: e[0]}));
+    }
+}
+
+export function getChatRef(id) {
+    return firebase.database().ref(`chat/${id}`).orderByKey();
+}
+
+export function addChatComment(id, comment) {
+    const user = firebase.auth().currentUser;
+    return firebase.database().ref(`chat/${id}`).push({
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        uid: user.uid,
+        text: comment,
+        date: Date.now(),
+    });
+}
+
 export function uploadPosterToStorage(auid, file, filename) {
     return firebase.storage().ref().child(`${auid}/posters/${filename}`).put(file);
 }

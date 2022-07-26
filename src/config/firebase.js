@@ -7,6 +7,7 @@ import 'firebase/compat/storage'
 const firebaseConfig = {
   apiKey: "AIzaSyAAodDcLQNNtTQQLM9-Bj4x-TWdfZ9bOIk",
   authDomain: "mfries2fs-1361d.firebaseapp.com",
+  databaseURL: "https://mfries2fs-1361d-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "mfries2fs-1361d",
   storageBucket: "mfries2fs-1361d.appspot.com",
   messagingSenderId: "144678630266",

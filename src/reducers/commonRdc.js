@@ -1,9 +1,16 @@
 import { 
     TOGGLE_DRAWER,
-    CLOSE_MODAL, OPEN_MODAL 
+    CLOSE_MODAL, 
+    OPEN_MODAL, 
+    LISTEN_TO_CHAT_COMMENT, 
+    HANDLE_SELECTED_TARGET, 
+    HANDLE_SCROLL_POSITION,
 } from "../constants/commonConst";
 
 const initialState = {
+    scrollPosition: 0,
+    selectedTarget: null,
+    comments: [],
     openDrawer: false,
     modal: {
         open: false,
@@ -13,6 +20,21 @@ const initialState = {
 
 export default function commonRdc(state = initialState, {type, payload}) {
     switch (type) {
+        case HANDLE_SCROLL_POSITION:
+            return {
+                ...state,
+                scrollPosition: payload,
+            }
+        case HANDLE_SELECTED_TARGET:
+            return {
+                ...state,
+                selectedTarget: payload,
+            }
+        case LISTEN_TO_CHAT_COMMENT:
+            return {
+                ...state,
+                comments: payload,
+            }
         case TOGGLE_DRAWER:
             return {
                 ...state,

@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import LoadingIndicator from './compo/common/utils/LoadingIndicator';
 import { ToastContainer } from 'react-toastify';
 import './App.css'
+import ChatComment from './compo/popups/ChatComment';
 
 const custom = createTheme({
   palette: {
@@ -54,6 +55,7 @@ export default function App() {
               <TopBar />
               <Container style={{ paddingLeft: 0, paddingRight: 0 }} maxWidth='sm'>
                 <Switch>
+                  <Route path='/c/:id' component={ChatComment} key={key} />
                   <Route exact path='/profile/:id' component={UserProfile} />
                   <Route exact path='/activities' component={ActivityList} />
                   <Route path='/activities/:id' component={ActivityItem} />
