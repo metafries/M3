@@ -11,14 +11,15 @@ export function getChatRef(id) {
     return firebase.database().ref(`chat/${id}`).orderByKey();
 }
 
-export function addChatComment(id, comment) {
+export function addChatComment(id, values) {
     const user = firebase.auth().currentUser;
     return firebase.database().ref(`chat/${id}`).push({
         displayName: user.displayName,
         photoURL: user.photoURL,
         uid: user.uid,
-        text: comment,
+        text: values.comment,
         date: Date.now(),
+        baseId: values.baseId,
     });
 }
 

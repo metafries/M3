@@ -19,6 +19,7 @@ import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import PhotosMenu from '../nav/PhotosMenu';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
+import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 
 const actions = '#afadaa';
 const inactive = '#a9a9a9';
@@ -150,12 +151,10 @@ export default function PhotosTab({
                                 image={ups.url}
                             />
                             <CardActions disableSpacing>
-                                <IconButton style={{ color: inactive }} aria-label="favorite">
-                                    <StarOutlineIcon />
+                                <IconButton style={{ color: inactive, padding: 0 }}>
+                                    <ThumbUpAltOutlinedIcon />
                                 </IconButton>
-                                <CustomBtn>
-                                    {`- -`}
-                                </CustomBtn>
+                                <span style={{ marginLeft: '5px', marginRight: '25px' }}>--</span>
                                 <IconButton style={{ color: inactive }} aria-label="chat">
                                     <ChatOutlinedIcon />
                                 </IconButton>

@@ -51,6 +51,11 @@ export async function updateUserProfilePhoto(downloadURL, filename) {
 export async function updateUserProfile(profile) {
     const user = firebase.auth().currentUser;
     try {
+        if (profile.coins) {
+            await user.updateProfile({
+                coins: profile.coins
+            })
+        }
         if (user.displayName !== profile.displayName) {
             await user.updateProfile({
                 displayName: profile.displayName

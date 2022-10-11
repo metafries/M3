@@ -34,6 +34,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PhotosMenu from '../nav/PhotosMenu';
 import { handleSearchActivities, listenToActivities } from '../../actions/activityActs';
 import ActivityListItem from '../cards/ActivityListItem';
+import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
+import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined';
 
 const actions = '#afadaa';
 const inactive = '#a9a9a9';
@@ -189,7 +191,7 @@ export default function ProfileContent({
             <AppBar className={classes.appBar} position="static">
                 <Toolbar>
                     <Tabs
-                        TabIndicatorProps={{style: {backgroundColor: '#eaff00'}}}
+                        TabIndicatorProps={{ style: { backgroundColor: '#eaff00' } }}
                         variant="scrollable"
                         indicatorColor="primary"
                         style={{ overflowY: 'scroll', padding: 0 }}
@@ -245,18 +247,18 @@ export default function ProfileContent({
                                     image={ups.url}
                                 />
                                 <CardActions disableSpacing>
-                                    <IconButton style={{ color: inactive }} aria-label="favorite">
-                                        <StarOutlineIcon />
+                                    <IconButton style={{ paddingRight: 0, color: inactive }}>
+                                        <ThumbUpAltOutlinedIcon />
                                     </IconButton>
-                                    <CustomBtn>
-                                        {`- -`}
-                                    </CustomBtn>
-                                    <IconButton style={{ color: inactive }} aria-label="chat">
+                                    <span style={{ marginLeft: '5px', marginRight: '10px' }}>--</span>
+                                    <IconButton style={{ paddingRight: 0, color: inactive }} aria-label="chat">
                                         <ChatOutlinedIcon />
                                     </IconButton>
-                                    <IconButton style={{ color: inactive }} aria-label="share">
-                                        <ShareOutlinedIcon />
+                                    <span style={{ marginLeft: '5px', marginRight: '10px' }}>--</span>
+                                    <IconButton style={{ paddingRight: 0, color: inactive }} aria-label="share">
+                                        <MonetizationOnOutlinedIcon />
                                     </IconButton>
+                                    <span style={{ marginLeft: '5px', marginRight: '10px' }}>--</span>
                                     <IconButton
                                         style={{ marginLeft: 'auto', color: actions }}
                                         onClick={(e) => {
@@ -273,7 +275,7 @@ export default function ProfileContent({
                     }
                 </div>
                 <div style={{ position: 'fixed', left: 0, width: '100%', bottom: 0 }}>
-                    <Container style={{  backgroundColor: '#eaff00', opacity: 0.9 }} maxWidth='sm'>
+                    <Container style={{ backgroundColor: '#eaff00', opacity: 0.9 }} maxWidth='sm'>
 
                         <FormControl className={classes.formControl}>
                             <Typography style={{ color: '#6d6d6d' }}>

@@ -81,6 +81,7 @@ export default function ProfileForm({
                     })}
                     onSubmit={async (v, { setSubmitting, setErrors }) => {
                         try {
+                            console.log(v)
                             await updateUserProfile(v);
                         } catch (error) {
                             setErrors({ auth: error.message });
